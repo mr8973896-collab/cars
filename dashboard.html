@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لوحة التحكم - إدارة المبيعات</title>
+    <title>لوحة التحكم - CarSales</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
         * {
@@ -38,7 +38,7 @@
             color: #b0b0c8;
         }
 
-        /* ===== إحصائيات ===== */
+        /* ===== إحصائيات بسيطة ===== */
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -68,13 +68,8 @@
             color: #8888a0;
             margin-top: 4px;
         }
-        .stat-card .sub {
-            font-size: 10px;
-            color: #666680;
-            margin-top: 2px;
-        }
 
-        /* ===== نموذج النشر ===== */
+        /* ===== نموذج النشر المبسط ===== */
         .form-container {
             max-width: 520px;
             margin: 0 auto;
@@ -97,7 +92,6 @@
             font-weight: 600;
         }
         .form-group input,
-        .form-group select,
         .form-group textarea {
             width: 100%;
             background: #18182a;
@@ -111,7 +105,6 @@
             transition: 0.2s;
         }
         .form-group input:focus,
-        .form-group select:focus,
         .form-group textarea:focus {
             border-color: #d4af37;
             box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
@@ -120,13 +113,8 @@
             resize: vertical;
             min-height: 70px;
         }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
 
-        /* ===== رفع الملفات (زر واحد) ===== */
+        /* ===== رفع الملفات ===== */
         .file-upload-area {
             background: #18182a;
             border: 2px dashed #2a2a42;
@@ -288,6 +276,7 @@
         /* ===== قائمة السيارات ===== */
         .cars-list {
             margin-top: 25px;
+            margin-bottom: 30px;
         }
         .cars-list h3 {
             font-size: 16px;
@@ -335,29 +324,6 @@
             font-size: 12px;
             color: #d4af37;
         }
-        .mini-status {
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 12px;
-            margin-top: 2px;
-            display: inline-block;
-        }
-        .mini-status.sold {
-            background: #1a2a1a;
-            color: #4ade80;
-        }
-        .mini-status.working {
-            background: #2a2a1a;
-            color: #d4af37;
-        }
-        .mini-status.pending {
-            background: #2a1a2a;
-            color: #f87171;
-        }
-        .mini-status.sold-by-seller {
-            background: #1a2a3a;
-            color: #60a5fa;
-        }
         .delete-btn {
             background: #dc2626;
             color: #fff;
@@ -368,29 +334,11 @@
             cursor: pointer;
             font-family: inherit;
         }
-        .approve-btn {
-            background: #d4af37;
-            color: #0a0a12;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 700;
-        }
-        .view-btn {
-            background: #1a3a5a;
-            color: #fff;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            font-family: inherit;
+        .delete-btn:hover {
+            background: #b91c1c;
         }
 
-        /* ===== مودال ===== */
+        /* ===== مودال السيارات المباعة ===== */
         .sold-cars-modal-overlay {
             position: fixed;
             top: 0;
@@ -454,10 +402,6 @@
             color: #d4af37;
             font-size: 13px;
         }
-        .sold-cars-modal-box .sold-item .info .seller {
-            color: #666680;
-            font-size: 11px;
-        }
         .sold-cars-modal-box .sold-item .actions {
             display: flex;
             gap: 6px;
@@ -504,7 +448,7 @@
             padding: 30px;
         }
 
-        /* ===== الشريط السفلي (معدل - شيل الأيقونة) ===== */
+        /* ===== الشريط السفلي ===== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -528,9 +472,6 @@
         }
 
         @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
             .dashboard-stats {
                 grid-template-columns: 1fr 1fr;
             }
@@ -541,6 +482,9 @@
             .sold-cars-modal-box .sold-item .actions {
                 justify-content: center;
             }
+            .preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
@@ -549,19 +493,16 @@
     <div class="header"><div class="logo">CarSales</div></div>
     <div class="page-title">👑 لوحة تحكم المدير</div>
 
-    <!-- ===== إحصائيات ===== -->
+    <!-- ===== إحصائيات بسيطة ===== -->
     <div class="dashboard-stats" id="statsContainer">
-        <div class="stat-card"><div class="num" id="totalCars">0</div><div class="label">إجمالي السيارات</div></div>
-        <div class="stat-card"><div class="num" id="workingCars">0</div><div class="label">قيد العمل</div><div class="sub">مع السيلسرز</div></div>
-        <div class="stat-card"><div class="num" id="pendingSales">0</div><div class="label">بانتظار المراجعة</div><div class="sub">تم البيع</div></div>
+        <div class="stat-card"><div class="num" id="totalCars">0</div><div class="label">🚗 إجمالي السيارات</div></div>
         <div class="stat-card" id="soldBySellerCard">
             <div class="num" id="soldBySellerCount">0</div>
-            <div class="label">🚗 تم بيعها من السيلسرز</div>
-            <div class="sub">اضغط على الكارت للمراجعة</div>
+            <div class="label">💰 تم بيعها من السيلسرز</div>
         </div>
     </div>
 
-    <!-- ===== نموذج النشر ===== -->
+    <!-- ===== نموذج النشر المبسط ===== -->
     <div class="form-container">
         <div class="msg success-msg" id="successMsg">✅ تم نشر السيارة بنجاح!</div>
         <div class="msg error-msg" id="errorMsg"></div>
@@ -571,7 +512,7 @@
         <div class="form-card">
             <form id="carForm">
 
-                <!-- ===== رفع الملفات (زر واحد) ===== -->
+                <!-- ===== رفع الملفات ===== -->
                 <div class="form-group">
                     <label>📸 صور وفيديوهات السيارة</label>
                     <div class="file-upload-area" id="fileUploadArea">
@@ -584,54 +525,21 @@
                     <div class="preview-grid" id="previewGrid"></div>
                 </div>
 
-                <!-- ===== بيانات السيارة (نفس اللي تظهر للمستخدم) ===== -->
+                <!-- ===== البيانات الأساسية فقط ===== -->
                 <div class="form-group">
                     <label>اسم السيارة *</label>
                     <input type="text" id="carName" placeholder="مثال: Mercedes-Benz GLE" required>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group"><label>السنة</label><input type="number" id="carYear" placeholder="2022"></div>
-                    <div class="form-group"><label>السعر (EGP) *</label><input type="number" id="carPrice" placeholder="3850000" required></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>المسافة (km)</label><input type="text" id="carKm" placeholder="90000 أو New"></div>
-                    <div class="form-group"><label>اللون</label><input type="text" id="carColor" placeholder="فضي"></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>الماركة</label><input type="text" id="carMake" placeholder="Mercedes-Benz"></div>
-                    <div class="form-group"><label>الموديل</label><input type="text" id="carModel" placeholder="GLE"></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>الحالة</label>
-                        <select id="carStatus">
-                            <option value="New">جديدة</option>
-                            <option value="Used">مستعملة</option>
-                            <option value="Pass">Pass</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>ناقل الحركة</label>
-                        <select id="carTrans">
-                            <option value="أوتوماتيك">أوتوماتيك</option>
-                            <option value="عادي">عادي</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label>السعر (EGP) *</label>
+                    <input type="number" id="carPrice" placeholder="3850000" required>
                 </div>
 
                 <div class="form-group">
                     <label>📄 الوصف</label>
                     <textarea id="carDesc" placeholder="اكتب تفاصيل السيارة هنا..."></textarea>
                 </div>
-
-                <!-- حقول إضافية مخفية -->
-                <input type="hidden" id="carLocation" value="مصر">
-                <input type="hidden" id="carEngine" value="-">
-                <input type="hidden" id="carFuel" value="بنزين">
-                <input type="hidden" id="carBody" value="SUV">
-                <input type="hidden" id="carPass" value="-">
 
                 <button type="submit" class="submit-btn" id="submitBtn">🚀 نشر السيارة</button>
             </form>
@@ -647,7 +555,7 @@
     <!-- ===== مودال عرض السيارات المباعة ===== -->
     <div class="sold-cars-modal-overlay" id="soldCarsModal">
         <div class="sold-cars-modal-box">
-            <h3>🚗 السيارات اللي السيلسرز باعوها</h3>
+            <h3>💰 السيارات المباعة من السيلسرز</h3>
             <div id="soldCarsList">
                 <div class="empty-msg">لا توجد سيارات مباعة من السيلسرز</div>
             </div>
@@ -655,7 +563,7 @@
         </div>
     </div>
 
-    <!-- ===== الشريط السفلي (نص فقط) ===== -->
+    <!-- ===== الشريط السفلي ===== -->
     <div class="bottom-nav">
         <div class="footer-text">CarSales <span>✦</span> لوحة التحكم</div>
     </div>
@@ -693,12 +601,18 @@
         let selectedFiles = [];
         let allCarsData = {};
 
-        // ===== عناصر الإحصائيات =====
         const totalCarsEl = document.getElementById('totalCars');
-        const workingCarsEl = document.getElementById('workingCars');
-        const pendingSalesEl = document.getElementById('pendingSales');
         const soldBySellerCountEl = document.getElementById('soldBySellerCount');
         const carsCountEl = document.getElementById('carsCount');
+
+        // ===== تنسيق حجم الملف =====
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
 
         // ===== معاينة الملفات =====
         function renderPreviews() {
@@ -708,14 +622,30 @@
                 const div = document.createElement('div');
                 div.className = 'preview-item';
                 const isVideo = file.type.startsWith('video/');
+                const sizeText = formatFileSize(file.size);
+                
                 if (isVideo) {
-                    div.innerHTML = `<video src="${url}" muted playsinline></video><button class="remove-btn" type="button" data-idx="${i}">×</button><span class="file-type">🎬 فيديو</span>`;
+                    div.innerHTML = `
+                        <video src="${url}" muted playsinline></video>
+                        <button class="remove-btn" type="button" data-idx="${i}">×</button>
+                        <span class="file-type">🎬 فيديو</span>
+                    `;
                 } else {
-                    div.innerHTML = `<img src="${url}" alt=""><button class="remove-btn" type="button" data-idx="${i}">×</button><span class="file-type">🖼️ صورة</span>`;
+                    div.innerHTML = `
+                        <img src="${url}" alt="">
+                        <button class="remove-btn" type="button" data-idx="${i}">×</button>
+                        <span class="file-type">🖼️ صورة</span>
+                    `;
                 }
                 previewGrid.appendChild(div);
             });
-            fileCount.textContent = selectedFiles.length > 0 ? `${selectedFiles.length} ملف مختار` : 'لم يتم اختيار أي ملفات';
+            
+            const totalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+            const totalSizeText = formatFileSize(totalSize);
+            fileCount.textContent = selectedFiles.length > 0 
+                ? `${selectedFiles.length} ملف (${totalSizeText})` 
+                : 'لم يتم اختيار أي ملفات';
+            
             previewGrid.querySelectorAll('.remove-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -733,8 +663,8 @@
             fileInput.value = '';
         });
 
-        // ===== ضغط الصور وتحويل الفيديوهات =====
-        function compressImage(file, maxWidth = 600, quality = 0.65) {
+        // ===== ضغط الصور =====
+        function compressImage(file, maxWidth = 400, quality = 0.5) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
                 const reader = new FileReader();
@@ -742,10 +672,11 @@
                     img.src = e.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let w = img.width,
-                            h = img.height;
-                        if (w > maxWidth) { h = Math.round(h * maxWidth / w);
-                            w = maxWidth; }
+                        let w = img.width, h = img.height;
+                        if (w > maxWidth) { 
+                            h = Math.round(h * maxWidth / w);
+                            w = maxWidth; 
+                        }
                         canvas.width = w;
                         canvas.height = h;
                         const ctx = canvas.getContext('2d');
@@ -783,8 +714,14 @@
 
             const name = document.getElementById('carName').value.trim();
             const price = document.getElementById('carPrice').value.trim();
-            if (!name || !price) { alert('الرجاء إدخال اسم السيارة والسعر'); return; }
-            if (selectedFiles.length === 0) { alert('اختر صورة واحدة على الأقل'); return; }
+            if (!name || !price) { 
+                alert('الرجاء إدخال اسم السيارة والسعر'); 
+                return; 
+            }
+            if (selectedFiles.length === 0) { 
+                alert('اختر صورة واحدة على الأقل'); 
+                return; 
+            }
 
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري النشر...';
@@ -805,16 +742,14 @@
 
                     if (isVideo) {
                         const sizeMB = file.size / (1024 * 1024);
-                        if (sizeMB > 1.5) {
-                            alert(`الفيديو ${i+1} كبير جداً (${sizeMB.toFixed(1)}MB). الحد الأقصى 1.5MB.`);
-                            continue;
-                        }
-                        setProgress(50 + Math.round((i / selectedFiles.length) * 30), `جاري تحويل الفيديو ${i + 1}...`);
+                        setProgress(50 + Math.round((i / selectedFiles.length) * 30), 
+                            `جاري تحويل الفيديو ${i + 1} (${sizeMB.toFixed(1)}MB)...`);
                         const b64 = await fileToBase64(file);
                         videoBase64s.push(b64);
                     } else {
-                        setProgress(10 + Math.round((i / selectedFiles.length) * 35), `جاري ضغط الصورة ${i + 1}...`);
-                        const b64 = await compressImage(file, 600, 0.65);
+                        setProgress(10 + Math.round((i / selectedFiles.length) * 35), 
+                            `جاري ضغط الصورة ${i + 1}...`);
+                        const b64 = await compressImage(file, 400, 0.5);
                         imageBase64s.push(b64);
                     }
                 }
@@ -826,25 +761,11 @@
                     imageUrls: imageBase64s,
                     videoUrls: videoBase64s,
                     name: name,
-                    make: document.getElementById('carMake').value.trim(),
-                    model: document.getElementById('carModel').value.trim(),
-                    year: document.getElementById('carYear').value.trim(),
                     price: price + ' EGP',
-                    km: document.getElementById('carKm').value.trim(),
-                    location: 'مصر',
-                    color: document.getElementById('carColor').value.trim(),
-                    engine: '-',
-                    fuel: 'بنزين',
-                    transmission: document.getElementById('carTrans').value,
-                    bodyType: 'SUV',
-                    status: document.getElementById('carStatus').value,
-                    pass: '-',
                     description: document.getElementById('carDesc').value.trim(),
                     date: new Date().toLocaleDateString('ar-EG'),
                     timestamp: Date.now(),
                     workStatus: null,
-                    workDays: null,
-                    workStartDate: null,
                     sold: false,
                     pendingApproval: false,
                     soldBySeller: false
@@ -886,9 +807,8 @@
                     div.className = 'sold-item';
                     div.innerHTML = `
                         <div class="info">
-                            <span class="name">${car.name || 'سيارة'} ${car.year || ''}</span>
+                            <span class="name">${car.name || 'سيارة'}</span>
                             <span class="price">${car.price || '0'}</span>
-                            <span class="seller">تم البيع بواسطة السيلسر • ${car.soldDate ? new Date(car.soldDate).toLocaleDateString('ar-EG') : 'تاريخ غير معروف'}</span>
                         </div>
                         <div class="actions">
                             <button class="btn-yes" data-key="${key}">✅ تم البيع</button>
@@ -907,8 +827,7 @@
                                 sold: true,
                                 soldBySeller: false,
                                 workStatus: 'completed',
-                                pendingApproval: false,
-                                soldDate: Date.now()
+                                pendingApproval: false
                             });
                             openSoldCarsModal();
                             alert('✅ تم تأكيد البيع! السيارة اختفت من الموقع.');
@@ -940,10 +859,8 @@
             document.getElementById('soldCarsModal').classList.add('open');
         }
 
-        // ===== فتح المودال من الكارت =====
         document.getElementById('soldBySellerCard').addEventListener('click', openSoldCarsModal);
 
-        // ===== إغلاق المودال =====
         document.getElementById('soldCarsModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('soldCarsModal')) {
                 document.getElementById('soldCarsModal').classList.remove('open');
@@ -954,13 +871,9 @@
         function updateUI() {
             const cars = Object.entries(allCarsData);
             const total = cars.length;
-            const working = cars.filter(([k, c]) => c.workStatus === 'working' && !c.sold).length;
-            const pending = cars.filter(([k, c]) => c.pendingApproval === true && !c.sold).length;
             const soldBySeller = cars.filter(([k, c]) => c.soldBySeller === true && !c.sold).length;
 
             totalCarsEl.textContent = total;
-            workingCarsEl.textContent = working;
-            pendingSalesEl.textContent = pending;
             soldBySellerCountEl.textContent = soldBySeller;
             carsCountEl.textContent = total;
 
@@ -973,25 +886,19 @@
                     const div = document.createElement('div');
                     div.className = 'mini-card';
                     const thumb = car.imageUrl || (car.imageUrls && car.imageUrls[0]) || 'https://via.placeholder.com/60?text=No+Image';
-                    let statusText = '',
-                        statusClass = '';
-                    if (car.sold) { statusText = '✅ تم البيع';
-                        statusClass = 'sold'; } else if (car.soldBySeller) { statusText = '🔵 بيع من السيلسر';
-                        statusClass = 'sold-by-seller'; } else if (car.pendingApproval) { statusText = '⏳ بانتظار المراجعة';
-                        statusClass = 'pending'; } else if (car.workStatus === 'working') { statusText = '💼 قيد العمل';
-                        statusClass = 'working'; } else { statusText = '📌 متاحة';
-                        statusClass = ''; }
+                    
+                    let statusText = '';
+                    if (car.sold) statusText = '✅ تم البيع';
+                    else if (car.soldBySeller) statusText = '💰 بيع من السيلسر';
 
                     div.innerHTML = `
                         <img src="${thumb}" alt="">
                         <div class="mini-info">
-                            <div class="mini-name">${car.name || 'بدون اسم'} ${car.year || ''}</div>
+                            <div class="mini-name">${car.name || 'بدون اسم'}</div>
                             <div class="mini-price">${car.price || '0'}</div>
-                            ${statusText ? `<span class="mini-status ${statusClass}">${statusText}</span>` : ''}
+                            ${statusText ? `<div style="font-size:10px;color:#d4af37;">${statusText}</div>` : ''}
                         </div>
-                        ${!car.sold && !car.pendingApproval && !car.soldBySeller ? `<button class="delete-btn" data-key="${key}">حذف</button>` : ''}
-                        ${car.pendingApproval && !car.sold ? `<button class="approve-btn" data-key="${key}">📋 مراجعة</button>` : ''}
-                        ${car.soldBySeller && !car.sold ? `<button class="view-btn" onclick="openSoldCarsModal()">🔍 عرض</button>` : ''}
+                        ${!car.sold && !car.soldBySeller ? `<button class="delete-btn" data-key="${key}">🗑️ حذف</button>` : ''}
                     `;
                     carsListContent.appendChild(div);
                 });
@@ -999,25 +906,24 @@
                 carsListContent.querySelectorAll('.delete-btn').forEach(btn => {
                     btn.addEventListener('click', async () => {
                         if (!confirm('هل أنت متأكد من الحذف؟')) return;
-                        try { await remove(ref(db, 'cars/' + btn.dataset.key)); } catch (err) { alert('فشل الحذف'); }
+                        try { 
+                            await remove(ref(db, 'cars/' + btn.dataset.key)); 
+                        } catch (err) { 
+                            alert('فشل الحذف'); 
+                        }
                     });
-                });
-
-                carsListContent.querySelectorAll('.approve-btn').forEach(btn => {
-                    btn.addEventListener('click', () => openSoldCarsModal());
                 });
             }
         }
 
-        // ===== الاستماع للتغييرات =====
         const carsRef = ref(db, 'cars');
         onValue(carsRef, (snapshot) => {
             allCarsData = snapshot.exists() ? snapshot.val() : {};
             updateUI();
         });
 
-        console.log('✅ لوحة تحكم المدير - تصميم مريح وهاديء مع زر رفع واحد');
+        console.log('✅ لوحة تحكم مبسطة - صور وفيديو + اسم + سعر + وصف فقط');
     </script>
 
 </body>
-</html>
+</html> 
