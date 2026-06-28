@@ -21,6 +21,9 @@
             padding: 16px 20px 10px;
             background: #00000d;
             border-bottom: 1px solid #1a1a3a;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
         .logo { color: #d4af37; font-size: 22px; font-weight: 700; }
         .page-title { font-size: 16px; color: #b0b0c0; }
@@ -32,6 +35,56 @@
             flex-direction: column;
             gap: 16px;
         }
+
+        /* ===== Skeleton Cards (شكل مؤقت أثناء التحميل) ===== */
+        .skeleton-card {
+            background: #0a0a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #1a1a3a;
+            display: flex;
+            flex-direction: column;
+            animation: shimmer 1.5s ease-in-out infinite;
+            position: relative;
+        }
+        .skeleton-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            transform: translateX(-100%);
+            animation: shimmerMove 1.8s ease-in-out infinite;
+        }
+        @keyframes shimmerMove {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .skeleton-card .skeleton-img {
+            width: 100%;
+            height: 100px;
+            background: #12122a;
+            border-radius: 12px;
+            margin: 12px;
+        }
+        .skeleton-card .skeleton-text {
+            height: 14px;
+            background: #12122a;
+            border-radius: 8px;
+            margin: 6px 12px;
+            width: 70%;
+        }
+        .skeleton-card .skeleton-text.short {
+            width: 40%;
+        }
+        .skeleton-card .skeleton-btn {
+            height: 38px;
+            background: #12122a;
+            border-radius: 10px;
+            margin: 6px 12px 12px;
+            width: calc(100% - 24px);
+        }
+
+        /* ===== Car Card ===== */
         .car-card {
             background: #0a0a1a;
             border-radius: 16px;
@@ -40,12 +93,25 @@
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardAppear 0.5s ease forwards;
+        }
+        .car-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .car-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-4px) scale(1.01);
             border-color: #d4af37;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.12);
         }
         .car-card.featured { border: 1px solid #d4af37; box-shadow: 0 0 30px rgba(212, 175, 55, 0.15); }
         .card-top { display: flex; padding: 12px; gap: 14px; align-items: center; flex-wrap: wrap; }
@@ -57,7 +123,8 @@
             border-radius: 12px;
             overflow: hidden;
         }
-        .car-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .car-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+        .car-card:hover .car-img-wrap img { transform: scale(1.03); }
         .img-count {
             position: absolute; top: 6px; left: 6px;
             background: rgba(0,0,0,0.8); color: #d4af37;
@@ -81,12 +148,12 @@
             width: 100%; padding: 10px; border-radius: 10px;
             border: none; background: #1a1a3a; color: #fff;
             font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
-            transition: 0.2s;
+            transition: 0.3s;
         }
         .btn-details:hover { background: #2a2a5a; }
         .no-cars { text-align: center; color: #888; font-size: 16px; padding: 40px; }
 
-        /* مودال التفاصيل */
+        /* باقي الكود (مودالات، بحث، إلخ) بنفس الشكل السابق مع بعض التعديلات البسيطة */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.95); z-index: 200;
@@ -164,11 +231,6 @@
         .fs-arrow:hover { background: rgba(255,255,255,0.18); }
         .fs-arrow.prev { left: 20px; }
         .fs-arrow.next { right: 20px; }
-        .fs-type-badge {
-            position: absolute; top: 20px; left: 20px;
-            background: rgba(220,38,38,0.8); color: #fff;
-            font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 700; z-index: 5;
-        }
 
         .modal-header {
             position: sticky; top: 0; z-index: 10;
@@ -242,7 +304,6 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* مودال البحث الذكي */
         .search-modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.92); backdrop-filter: blur(16px);
@@ -285,6 +346,70 @@
         .bag-panel h3 { color: #d4af37; font-size: 18px; margin-bottom: 12px; }
         .bag-panel .empty-msg { text-align: center; color: #666; padding: 30px; }
 
+        /* ===== مودالات العمل والبيع والإلغاء ===== */
+        .work-modal-overlay, .sale-modal-overlay, .cancel-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(16px);
+            z-index: 400;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .work-modal-overlay.open, .sale-modal-overlay.open, .cancel-modal-overlay.open { display: flex; }
+        .work-modal-box, .sale-modal-box, .cancel-modal-box {
+            background: linear-gradient(145deg, #1a1410, #120d09);
+            border-radius: 28px;
+            padding: 35px 30px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            animation: slideUp 0.3s ease;
+            text-align: center;
+        }
+        .work-modal-box h3, .sale-modal-box h3, .cancel-modal-box h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .work-modal-box h3 { color: #d4af37; }
+        .sale-modal-box h3 { color: #22c55e; }
+        .cancel-modal-box h3 { color: #ef4444; }
+        .work-modal-box .sub, .sale-modal-box p, .cancel-modal-box p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .work-modal-box input {
+            width: 100%; padding: 14px; border-radius: 14px;
+            border: 1.5px solid rgba(139,107,74,0.2);
+            background: rgba(0,0,0,0.4); color: #fff; font-size: 16px;
+            font-family: inherit; outline: none; text-align: center;
+            margin-bottom: 16px;
+        }
+        .work-modal-box input:focus { border-color: #d4af37; }
+        .work-actions, .sale-actions, .cancel-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .work-actions button, .sale-actions button, .cancel-actions button {
+            flex: 1; padding: 14px; border-radius: 16px; border: none;
+            font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .btn-work-confirm { background: linear-gradient(135deg, #d4af37, #c5a030); color: #000; }
+        .btn-sale-yes { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+        .btn-cancel-yes { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+        .btn-work-cancel, .btn-sale-no, .btn-cancel-no {
+            background: rgba(255,255,255,0.06); color: #fff;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .btn-work-confirm:hover, .btn-sale-yes:hover, .btn-cancel-yes:hover { transform: translateY(-2px); }
+        .btn-work-cancel:hover, .btn-sale-no:hover, .btn-cancel-no:hover { background: rgba(255,255,255,0.12); }
+
         @media (max-width: 600px) {
             .car-img-wrap { width: 100%; height: 160px; }
             .card-info { flex: 1; min-width: 150px; }
@@ -296,6 +421,7 @@
             .slider-arrow { width: 34px; height: 34px; font-size: 18px; }
             .modal-act-btn { padding: 10px 12px; font-size: 13px; }
             .search-modal-box { padding: 25px 20px; }
+            .skeleton-card .skeleton-img { height: 160px; }
         }
     </style>
 </head>
@@ -312,7 +438,7 @@
     </div>
 
     <div class="gallery" id="gallery">
-        <p class="no-cars" id="loadingText">جاري تحميل السيارات...</p>
+        <!-- هتتحط هنا السكيلتون كاردز أول ما الموقع يتحمل -->
     </div>
 
     <!-- مودال البحث الذكي -->
@@ -321,7 +447,7 @@
             <h3>🔍 بحث ذكي متقدم</h3>
             <div class="field">
                 <label>اسم السيارة / الموديل / أي كلمة</label>
-                <input type="text" id="searchName" placeholder="مثال: شيف, BMW, 2007, أو أي وصف">
+                <input type="text" id="searchName" placeholder="مثال: شيف, BMW, 2007">
             </div>
             <div class="field">
                 <label>السعر من</label>
@@ -333,11 +459,11 @@
             </div>
             <div class="field">
                 <label>السنة / الموديل (رقم)</label>
-                <input type="text" id="searchYear" placeholder="مثال: 2023 أو 23 أو 7">
+                <input type="text" id="searchYear" placeholder="مثال: 2023">
             </div>
             <div class="field">
                 <label>اللون</label>
-                <input type="text" id="searchColor" placeholder="أسود، أبيض، أحمر">
+                <input type="text" id="searchColor" placeholder="أسود، أبيض">
             </div>
             <div class="search-actions">
                 <button class="btn-search-go" id="searchGoBtn">🔍 بحث ذكي</button>
@@ -347,38 +473,38 @@
     </div>
 
     <!-- مودال بدأ العمل -->
-    <div class="work-modal-overlay" id="workModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(16px); z-index:400; align-items:center; justify-content:center; padding:20px;">
-        <div class="work-modal-box" style="background:linear-gradient(145deg,#1a1410,#120d09); border:1.5px solid rgba(212,175,55,0.3); border-radius:28px; padding:35px 30px; max-width:420px; width:100%; box-shadow:0 40px 80px rgba(0,0,0,0.8); text-align:center;">
-            <h3 style="color:#d4af37; font-size:22px; margin-bottom:8px;">💼 بدأ العمل</h3>
-            <div class="sub" style="color:#aaa; font-size:14px; margin-bottom:20px;">متوقع أن تبيع هذه السيارة خلال كم يوم؟</div>
-            <input type="number" id="workDays" placeholder="مثال: 5" min="1" max="30" style="width:100%; padding:14px; border-radius:14px; border:1.5px solid rgba(139,107,74,0.2); background:rgba(0,0,0,0.4); color:#fff; font-size:16px; font-family:inherit; outline:none; text-align:center; margin-bottom:16px;">
-            <div class="work-actions" style="display:flex; gap:12px;">
-                <button class="btn-work-confirm" id="workConfirmBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:linear-gradient(135deg,#d4af37,#c5a030); color:#000;">موافق</button>
-                <button class="btn-work-cancel" id="workCancelBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.08);">إلغاء</button>
+    <div class="work-modal-overlay" id="workModal">
+        <div class="work-modal-box">
+            <h3>💼 بدأ العمل</h3>
+            <div class="sub">متوقع أن تبيع هذه السيارة خلال كم يوم؟</div>
+            <input type="number" id="workDays" placeholder="مثال: 5" min="1" max="30">
+            <div class="work-actions">
+                <button class="btn-work-confirm" id="workConfirmBtn">موافق</button>
+                <button class="btn-work-cancel" id="workCancelBtn">إلغاء</button>
             </div>
         </div>
     </div>
 
     <!-- مودال تأكيد البيع -->
-    <div class="sale-modal-overlay" id="saleModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(16px); z-index:500; align-items:center; justify-content:center; padding:20px;">
-        <div class="sale-modal-box" style="background:linear-gradient(145deg,#1a1410,#120d09); border:1.5px solid rgba(34,197,94,0.3); border-radius:28px; padding:35px 30px; max-width:420px; width:100%; text-align:center;">
-            <h3 style="color:#22c55e; font-size:22px; margin-bottom:8px;">💰 تأكيد البيع</h3>
-            <p id="saleConfirmText" style="color:#ccc; font-size:14px; margin-bottom:22px; line-height:1.7;">هل أنت متأكد من أن هذه السيارة قد تم بيعها فعلاً؟</p>
-            <div class="sale-actions" style="display:flex; gap:12px;">
-                <button class="btn-sale-yes" id="saleYesBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff;">نعم، تم البيع</button>
-                <button class="btn-sale-no" id="saleNoBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.08);">لا، تراجع</button>
+    <div class="sale-modal-overlay" id="saleModal">
+        <div class="sale-modal-box">
+            <h3>💰 تأكيد البيع</h3>
+            <p>هل أنت متأكد من أن هذه السيارة قد تم بيعها فعلاً؟</p>
+            <div class="sale-actions">
+                <button class="btn-sale-yes" id="saleYesBtn">نعم، تم البيع</button>
+                <button class="btn-sale-no" id="saleNoBtn">لا، تراجع</button>
             </div>
         </div>
     </div>
 
     <!-- مودال إلغاء العمل -->
-    <div class="cancel-modal-overlay" id="cancelModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(16px); z-index:500; align-items:center; justify-content:center; padding:20px;">
-        <div class="cancel-modal-box" style="background:linear-gradient(145deg,#1a1410,#120d09); border:1.5px solid rgba(239,68,68,0.3); border-radius:28px; padding:35px 30px; max-width:420px; width:100%; text-align:center;">
-            <h3 style="color:#ef4444; font-size:22px; margin-bottom:8px;">⚠️ تأكيد الإلغاء</h3>
-            <p style="color:#ccc; font-size:14px; margin-bottom:22px; line-height:1.7;">هل أنت متأكد من إلغاء العمل على هذه السيارة؟</p>
-            <div class="cancel-actions" style="display:flex; gap:12px;">
-                <button class="btn-cancel-yes" id="cancelYesBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff;">نعم، إلغاء</button>
-                <button class="btn-cancel-no" id="cancelNoBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.08);">لا، تراجع</button>
+    <div class="cancel-modal-overlay" id="cancelModal">
+        <div class="cancel-modal-box">
+            <h3>⚠️ تأكيد الإلغاء</h3>
+            <p>هل أنت متأكد من إلغاء العمل على هذه السيارة؟</p>
+            <div class="cancel-actions">
+                <button class="btn-cancel-yes" id="cancelYesBtn">نعم، إلغاء</button>
+                <button class="btn-cancel-no" id="cancelNoBtn">لا، تراجع</button>
             </div>
         </div>
     </div>
@@ -441,6 +567,7 @@
         let currentCarId = null;
         let fsMediaArray = [];
         let fsCurrentIndex = 0;
+        let isLoading = true;
 
         const bagPanel = document.getElementById('bagPanel');
         const bagContent = document.getElementById('bagContent');
@@ -448,6 +575,30 @@
         const fsContainer = document.getElementById('fsContainer');
         const fsCounter = document.getElementById('fsCounter');
 
+        // ===== عرض Skeleton Cards (كروت وهمية أثناء التحميل) =====
+        function showSkeletonCards(count = 5) {
+            gallery.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const skeleton = document.createElement('div');
+                skeleton.className = 'skeleton-card';
+                skeleton.style.animationDelay = (i * 0.1) + 's';
+                skeleton.innerHTML = `
+                    <div class="card-top">
+                        <div class="skeleton-img"></div>
+                        <div class="card-info">
+                            <div class="skeleton-text"></div>
+                            <div class="skeleton-text short"></div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <div class="skeleton-btn"></div>
+                    </div>
+                `;
+                gallery.appendChild(skeleton);
+            }
+        }
+
+        // ===== دوال مساعدة =====
         function getAllImages(car) {
             let images = [];
             if (car.imageUrls && Array.isArray(car.imageUrls) && car.imageUrls.length > 0) {
@@ -477,34 +628,24 @@
             return media;
         }
 
-        // ===== البحث الذكي الشامل جداً =====
+        // ===== البحث الذكي =====
         function smartSearch(query, text) {
             if (!query || !text) return false;
             const q = query.toLowerCase().trim();
             const t = text.toLowerCase().trim();
-            
-            // 1. البحث المباشر
             if (t.includes(q)) return true;
-            
-            // 2. البحث بالكلمات المنفصلة (أي كلمة من كلمات البحث موجودة)
             const words = q.split(/\s+/);
             for (let word of words) {
                 if (word.length > 1 && t.includes(word)) return true;
             }
-            
-            // 3. البحث بالحروف المتتابعة (مثلاً: "شف" تبحث عن "شيفروليه")
-            // نأخذ أول 3 حروف من الاستعلام ونبحث عنها
             if (q.length >= 2) {
                 const prefix = q.substring(0, Math.min(q.length, 3));
                 if (t.includes(prefix)) return true;
             }
-            
             return false;
         }
 
-        // دالة بحث فائقة الذكاء - تبحث في كل الحقول
         function isCarMatch(car, filters) {
-            // تجميع كل النصوص من السيارة في نص واحد للبحث الشامل
             const allText = [
                 car.name || '',
                 car.model || '',
@@ -514,14 +655,10 @@
                 String(car.year || '')
             ].join(' ').toLowerCase();
 
-            // 1. البحث في النص الكامل (اسم + وصف + كل الحقول)
             let nameMatch = true;
             if (filters.name) {
                 const query = filters.name.toLowerCase().trim();
-                // البحث في النص الكامل
                 nameMatch = allText.includes(query) || smartSearch(query, allText);
-                
-                // محاولة إضافية: البحث في كل حقل على حدة
                 if (!nameMatch) {
                     const fields = [car.name, car.model, car.make, car.color, car.description];
                     for (let field of fields) {
@@ -533,13 +670,11 @@
                 }
             }
 
-            // 2. السعر
             const price = parseFloat(String(car.price || '0').replace(/,/g, '')) || 0;
             const priceFrom = parseFloat(filters.priceFrom) || 0;
             const priceTo = parseFloat(filters.priceTo) || 0;
             const priceMatch = price >= priceFrom && (priceTo === 0 || price <= priceTo);
 
-            // 3. السنة - بحث ذكي في النص الكامل أيضاً
             let yearMatch = true;
             if (filters.year && filters.year.trim()) {
                 const yearQuery = filters.year.trim();
@@ -552,7 +687,6 @@
                             allText.includes(yearQuery);
             }
 
-            // 4. اللون - بحث ذكي
             let colorMatch = true;
             if (filters.color && filters.color.trim()) {
                 const colorQuery = filters.color.trim();
@@ -566,11 +700,12 @@
             return nameMatch && priceMatch && yearMatch && colorMatch;
         }
 
+        // ===== عرض الكروت الحقيقية =====
         function renderCars(data, searchFilters = null) {
             gallery.style.display = 'block';
             bagPanel.classList.remove('show');
-            gallery.innerHTML = "";
-
+            
+            // لو فيه داتا، نشيل السكيلتون ونعرض الكروت
             if (!data || Object.keys(data).length === 0) {
                 gallery.innerHTML = '<p class="no-cars">🚗 لا توجد سيارات منشورة حالياً.</p>';
                 return;
@@ -580,17 +715,14 @@
             allCarsArray = entries.map(([key, car]) => ({ key, car }));
 
             let visibleEntries = entries.filter(([key, car]) => {
-                // استبعاد السيارات قيد العمل والمباعة
                 if (car.workStatus === 'working') return false;
                 if (car.sold === true) return false;
-                
                 if (searchFilters) {
                     return isCarMatch(car, searchFilters);
                 }
                 return true;
             });
 
-            // ترتيب حسب الأحدث
             visibleEntries.sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
 
             if (visibleEntries.length === 0) {
@@ -598,10 +730,13 @@
                 return;
             }
 
+            gallery.innerHTML = '';
             visibleEntries.forEach(([key, car], index) => {
                 const isFeatured = index === 0;
                 const card = document.createElement('div');
                 card.className = 'car-card' + (isFeatured ? ' featured' : '');
+                // تأخير بسيط لكل كارد عشان يظهر بتدرج
+                card.style.animationDelay = (index * 0.08) + 's';
                 card.onclick = () => openModal(key);
 
                 const allImages = getAllImages(car);
@@ -631,6 +766,7 @@
             updateBagCount();
         }
 
+        // ===== باقي الدوال (شنطة العمل، بحث، مودالات) =====
         window.showBagUI = function() {
             const workingCars = allCarsArray.filter(({ car }) => car.workStatus === 'working' && car.sold !== true);
             bagPanel.classList.add('show');
@@ -701,7 +837,6 @@
                 year: document.getElementById('searchYear').value.trim(),
                 color: document.getElementById('searchColor').value.trim()
             };
-
             bagPanel.classList.remove('show');
             renderCars(carsData, filters);
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -709,7 +844,6 @@
         }
 
         const searchModal = document.getElementById('searchModal');
-
         window.openSearchModal = function() {
             searchModal.classList.add('open');
             document.getElementById('searchName').value = '';
@@ -719,150 +853,70 @@
             document.getElementById('searchColor').value = '';
             document.getElementById('searchName').focus();
         };
-
-        document.getElementById('searchCancelBtn').addEventListener('click', () => {
-            searchModal.classList.remove('open');
-        });
-        document.getElementById('searchGoBtn').addEventListener('click', () => {
-            advancedSearch();
-            searchModal.classList.remove('open');
-        });
-        searchModal.addEventListener('click', (e) => {
-            if (e.target === searchModal) searchModal.classList.remove('open');
-        });
+        document.getElementById('searchCancelBtn').addEventListener('click', () => searchModal.classList.remove('open'));
+        document.getElementById('searchGoBtn').addEventListener('click', () => { advancedSearch(); searchModal.classList.remove('open'); });
+        searchModal.addEventListener('click', (e) => { if (e.target === searchModal) searchModal.classList.remove('open'); });
 
         // ===== Work Modal =====
         const workModal = document.getElementById('workModal');
         const workDaysInput = document.getElementById('workDays');
-
         window.startWork = function(carId) {
             currentCarId = carId;
-            workModal.style.display = 'flex';
+            workModal.classList.add('open');
             workDaysInput.focus();
         };
-
-        document.getElementById('workCancelBtn').addEventListener('click', () => {
-            workModal.style.display = 'none';
-            currentCarId = null;
-        });
-
+        document.getElementById('workCancelBtn').addEventListener('click', () => { workModal.classList.remove('open'); currentCarId = null; });
         document.getElementById('workConfirmBtn').addEventListener('click', async () => {
             const days = parseInt(workDaysInput.value);
-            if (!days || days < 1 || days > 30) {
-                alert('الرجاء إدخال عدد أيام صحيح (1-30)');
-                return;
-            }
-            if (!currentCarId) {
-                alert('حدث خطأ، يرجى المحاولة مرة أخرى');
-                return;
-            }
-
+            if (!days || days < 1 || days > 30) { alert('الرجاء إدخال عدد أيام صحيح (1-30)'); return; }
+            if (!currentCarId) { alert('حدث خطأ، يرجى المحاولة مرة أخرى'); return; }
             try {
-                const carRef = ref(db, 'cars/' + currentCarId);
-                await update(carRef, {
-                    workStatus: 'working',
-                    workDays: days,
-                    workStartDate: Date.now(),
-                    sold: false
-                });
-                workModal.style.display = 'none';
+                await update(ref(db, 'cars/' + currentCarId), { workStatus: 'working', workDays: days, workStartDate: Date.now(), sold: false });
+                workModal.classList.remove('open');
                 closeModal();
-                setTimeout(() => { showBagUI(); }, 300);
-            } catch (err) {
-                console.error(err);
-                alert('حدث خطأ: ' + err.message);
-            }
+                setTimeout(() => showBagUI(), 300);
+            } catch (err) { alert('حدث خطأ: ' + err.message); }
         });
-
-        workModal.addEventListener('click', (e) => {
-            if (e.target === workModal) {
-                workModal.style.display = 'none';
-                currentCarId = null;
-            }
-        });
+        workModal.addEventListener('click', (e) => { if (e.target === workModal) { workModal.classList.remove('open'); currentCarId = null; } });
 
         // ===== Sale Modal =====
         const saleModal = document.getElementById('saleModal');
         let pendingSaleCarId = null;
-
-        window.showSaleConfirm = function(carId) {
-            pendingSaleCarId = carId;
-            saleModal.style.display = 'flex';
-        };
-
-        document.getElementById('saleNoBtn').addEventListener('click', () => {
-            saleModal.style.display = 'none';
-            pendingSaleCarId = null;
-        });
-
+        window.showSaleConfirm = function(carId) { pendingSaleCarId = carId; saleModal.classList.add('open'); };
+        document.getElementById('saleNoBtn').addEventListener('click', () => { saleModal.classList.remove('open'); pendingSaleCarId = null; });
         document.getElementById('saleYesBtn').addEventListener('click', async () => {
             if (!pendingSaleCarId) return;
             try {
-                const carRef = ref(db, 'cars/' + pendingSaleCarId);
-                await update(carRef, { sold: true, workStatus: 'completed', soldDate: Date.now() });
-                saleModal.style.display = 'none';
+                await update(ref(db, 'cars/' + pendingSaleCarId), { sold: true, workStatus: 'completed', soldDate: Date.now() });
+                saleModal.classList.remove('open');
                 closeModal();
                 const snapshot = await get(ref(db, 'cars'));
-                if (snapshot.exists()) {
-                    carsData = snapshot.val();
-                    allCarsArray = Object.entries(carsData).map(([key, car]) => ({ key, car }));
-                }
+                if (snapshot.exists()) { carsData = snapshot.val(); allCarsArray = Object.entries(carsData).map(([key, car]) => ({ key, car })); }
                 const workingCars = allCarsArray.filter(({ car }) => car.workStatus === 'working' && car.sold !== true);
-                if (workingCars.length > 0) { showBagUI(); } else { goHome(); }
+                if (workingCars.length > 0) showBagUI(); else goHome();
                 updateBagCount();
-            } catch (err) {
-                console.error(err);
-                alert('حدث خطأ: ' + err.message);
-            }
+            } catch (err) { alert('حدث خطأ: ' + err.message); }
         });
-
-        saleModal.addEventListener('click', (e) => {
-            if (e.target === saleModal) {
-                saleModal.style.display = 'none';
-                pendingSaleCarId = null;
-            }
-        });
+        saleModal.addEventListener('click', (e) => { if (e.target === saleModal) { saleModal.classList.remove('open'); pendingSaleCarId = null; } });
 
         // ===== Cancel Modal =====
         const cancelModal = document.getElementById('cancelModal');
         let pendingCancelCarId = null;
-
-        window.openCancelModal = function(carId) {
-            pendingCancelCarId = carId;
-            cancelModal.style.display = 'flex';
-        };
-
-        document.getElementById('cancelNoBtn').addEventListener('click', () => {
-            cancelModal.style.display = 'none';
-            pendingCancelCarId = null;
-        });
-
+        window.openCancelModal = function(carId) { pendingCancelCarId = carId; cancelModal.classList.add('open'); };
+        document.getElementById('cancelNoBtn').addEventListener('click', () => { cancelModal.classList.remove('open'); pendingCancelCarId = null; });
         document.getElementById('cancelYesBtn').addEventListener('click', async () => {
             if (!pendingCancelCarId) return;
             try {
-                const carRef = ref(db, 'cars/' + pendingCancelCarId);
-                await update(carRef, { workStatus: null, workDays: null, workStartDate: null });
-                cancelModal.style.display = 'none';
+                await update(ref(db, 'cars/' + pendingCancelCarId), { workStatus: null, workDays: null, workStartDate: null });
+                cancelModal.classList.remove('open');
                 closeModal();
                 const snapshot = await get(ref(db, 'cars'));
-                if (snapshot.exists()) {
-                    carsData = snapshot.val();
-                    allCarsArray = Object.entries(carsData).map(([key, car]) => ({ key, car }));
-                }
+                if (snapshot.exists()) { carsData = snapshot.val(); allCarsArray = Object.entries(carsData).map(([key, car]) => ({ key, car })); }
                 showBagUI();
                 updateBagCount();
-            } catch (err) {
-                console.error(err);
-                alert('حدث خطأ: ' + err.message);
-            }
+            } catch (err) { alert('حدث خطأ: ' + err.message); }
         });
-
-        cancelModal.addEventListener('click', (e) => {
-            if (e.target === cancelModal) {
-                cancelModal.style.display = 'none';
-                pendingCancelCarId = null;
-            }
-        });
+        cancelModal.addEventListener('click', (e) => { if (e.target === cancelModal) { cancelModal.classList.remove('open'); pendingCancelCarId = null; } });
 
         window.goHome = function() {
             bagPanel.classList.remove('show');
@@ -879,10 +933,7 @@
 
             try {
                 const snapshot = await get(ref(db, 'cars/' + carId));
-                if (!snapshot.exists()) {
-                    modalContent.innerHTML = '<div class="loading-modal" style="text-align:center; padding:80px 20px; color:#f87171;">السيارة غير موجودة.</div>';
-                    return;
-                }
+                if (!snapshot.exists()) { modalContent.innerHTML = '<div class="loading-modal" style="text-align:center; padding:80px 20px; color:#f87171;">السيارة غير موجودة.</div>'; return; }
                 const car = snapshot.val();
                 const isWorking = car.workStatus === 'working' && car.sold !== true;
                 const isSold = car.sold === true;
@@ -962,14 +1013,10 @@
                     <div class="modal-actions">${buttonsHtml}</div>
                 `;
 
-                if (allMedia.length > 1) {
-                    initSlider(allMedia);
-                } else if (allMedia.length === 1) {
+                if (allMedia.length > 1) { initSlider(allMedia); } 
+                else if (allMedia.length === 1) {
                     const slide = document.querySelector('.slider-slide');
-                    if (slide) {
-                        slide.style.cursor = 'pointer';
-                        slide.addEventListener('click', () => openFullscreen(allMedia, 0));
-                    }
+                    if (slide) { slide.style.cursor = 'pointer'; slide.addEventListener('click', () => openFullscreen(allMedia, 0)); }
                 }
             } catch (err) {
                 console.error(err);
@@ -993,26 +1040,18 @@
                 allVideos.forEach((video, idx) => { if (idx !== current) video.pause(); });
             }
 
-            function goTo(idx) {
-                current = (idx + mediaArray.length) % mediaArray.length;
-                updateSlider();
-            }
+            function goTo(idx) { current = (idx + mediaArray.length) % mediaArray.length; updateSlider(); }
 
             document.querySelectorAll('.slider-slide').forEach(slide => {
                 slide.style.cursor = 'pointer';
-                slide.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openFullscreen(mediaArray, current);
-                });
+                slide.addEventListener('click', (e) => { e.stopPropagation(); openFullscreen(mediaArray, current); });
             });
 
             const prevBtn = document.getElementById('sliderPrev');
             const nextBtn = document.getElementById('sliderNext');
             if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
             if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
-            dots.forEach(dot => {
-                dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(parseInt(dot.dataset.index)); });
-            });
+            dots.forEach(dot => { dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(parseInt(dot.dataset.index)); }); });
 
             let touchStartX = 0, touchEndX = 0;
             if (container) {
@@ -1025,10 +1064,7 @@
             }
         }
 
-        window.closeModal = function() {
-            carModal.classList.remove('open');
-            document.body.style.overflow = '';
-        };
+        window.closeModal = function() { carModal.classList.remove('open'); document.body.style.overflow = ''; };
         carModal.addEventListener('click', (e) => { if (e.target === carModal) closeModal(); });
         window.openModal = openModal;
 
@@ -1045,33 +1081,15 @@
             const item = fsMediaArray[fsCurrentIndex];
             if (!item) return;
             let html = '';
-            if (item.type === 'video') {
-                html = `<video src="${item.url}" controls autoplay playsinline></video>`;
-            } else {
-                html = `<img src="${item.url}" alt="صورة" loading="eager">`;
-            }
+            if (item.type === 'video') { html = `<video src="${item.url}" controls autoplay playsinline></video>`; } 
+            else { html = `<img src="${item.url}" alt="صورة" loading="eager">`; }
             fsContainer.innerHTML = html;
             fsCounter.textContent = `${fsCurrentIndex + 1} / ${fsMediaArray.length}`;
         }
 
-        function closeFullscreen() {
-            fsOverlay.classList.remove('open');
-            fsContainer.innerHTML = '';
-            document.body.style.overflow = '';
-        }
-
-        function fsPrev() {
-            if (fsCurrentIndex > 0) {
-                fsCurrentIndex--;
-                renderFullscreenItem();
-            }
-        }
-        function fsNext() {
-            if (fsCurrentIndex < fsMediaArray.length - 1) {
-                fsCurrentIndex++;
-                renderFullscreenItem();
-            }
-        }
+        function closeFullscreen() { fsOverlay.classList.remove('open'); fsContainer.innerHTML = ''; document.body.style.overflow = ''; }
+        function fsPrev() { if (fsCurrentIndex > 0) { fsCurrentIndex--; renderFullscreenItem(); } }
+        function fsNext() { if (fsCurrentIndex < fsMediaArray.length - 1) { fsCurrentIndex++; renderFullscreenItem(); } }
 
         document.getElementById('fsClose').addEventListener('click', closeFullscreen);
         document.getElementById('fsPrevBtn').addEventListener('click', (e) => { e.stopPropagation(); fsPrev(); });
@@ -1086,23 +1104,47 @@
             }
         });
 
-        // ===== Load Data =====
+        // ===== تحميل البيانات مع ظهور السكيلتون أولاً =====
+        // 1. نعرض السكيلتون كاردز فوراً
+        showSkeletonCards(6);
+
+        // 2. نستمع لتحديثات البيانات
         const carsRef = ref(db, 'cars');
         onValue(carsRef, (snapshot) => {
             const data = snapshot.exists() ? snapshot.val() : null;
             carsData = data;
             allCarsArray = data ? Object.entries(data).map(([key, car]) => ({ key, car })) : [];
-            if (!bagPanel.classList.contains('show')) {
-                renderCars(data);
-            } else {
-                showBagUI();
-            }
-            updateBagCount();
+            
+            // تأخير بسيط عشان السكيلتون يبان قليل
+            setTimeout(() => {
+                if (!bagPanel.classList.contains('show')) {
+                    renderCars(data);
+                } else {
+                    showBagUI();
+                }
+                updateBagCount();
+                isLoading = false;
+            }, 300);
         });
 
-        window.onload = () => { goHome(); };
-        console.log('✅ CarSales - بحث ذكي جداً يبحث في كل الحقول حتى لو كتبت جزء من الاسم');
+        // 3. لو في حالة error أو timeout، نخفي السكيلتون ونعرض رسالة
+        setTimeout(() => {
+            if (isLoading && gallery.querySelector('.skeleton-card')) {
+                gallery.innerHTML = '<p class="no-cars">⏳ جاري تحميل السيارات...</p>';
+            }
+        }, 5000);
+
+        window.onload = () => { 
+            // نضمن ظهور السكيلتون حتى لو البيانات جاية بسرعة
+            setTimeout(() => {
+                if (gallery.querySelector('.skeleton-card') && !isLoading) {
+                    // السكيلتون هيتشال بالـ render
+                }
+            }, 100);
+        };
+
+        console.log('✅ CarSales - تحميل فوري مع سكيلتون كاردز وتأثيرات راقية');
     </script>
 
 </body>
-</html>
+</html> 
