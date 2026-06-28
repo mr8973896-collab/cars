@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>معرض السيارات</title>
+    <title>معرض السيارات الذكي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000008;
+            background: #000008;
             color: #ffffff;
             min-height: 100vh;
             padding-bottom: 80px;
@@ -26,16 +22,8 @@
             background: #00000d;
             border-bottom: 1px solid #1a1a3a;
         }
-        .logo {
-            color: #d4af37;
-            font-size: 22px;
-            font-weight: 700;
-        }
-        .page-title {
-            font-size: 16px;
-            color: #b0b0c0;
-        }
-
+        .logo { color: #d4af37; font-size: 22px; font-weight: 700; }
+        .page-title { font-size: 16px; color: #b0b0c0; }
         .gallery {
             max-width: 800px;
             margin: 20px auto 0;
@@ -44,8 +32,6 @@
             flex-direction: column;
             gap: 16px;
         }
-
-        /* ===== كارد السيارة ===== */
         .car-card {
             background: #0a0a1a;
             border-radius: 16px;
@@ -61,17 +47,8 @@
             border-color: #d4af37;
             box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12);
         }
-        .car-card.featured {
-            border: 1px solid #d4af37;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
-        }
-
-        .card-top {
-            display: flex;
-            padding: 12px;
-            gap: 14px;
-            align-items: center;
-        }
+        .car-card.featured { border: 1px solid #d4af37; box-shadow: 0 0 30px rgba(212, 175, 55, 0.15); }
+        .card-top { display: flex; padding: 12px; gap: 14px; align-items: center; flex-wrap: wrap; }
         .car-img-wrap {
             position: relative;
             width: 130px;
@@ -79,838 +56,272 @@
             flex-shrink: 0;
             border-radius: 12px;
             overflow: hidden;
-            order: 0;
         }
-        .car-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+        .car-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .img-count {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #d4af37;
-            font-size: 11px;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-weight: 700;
+            position: absolute; top: 6px; left: 6px;
+            background: rgba(0,0,0,0.8); color: #d4af37;
+            font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 700;
+        }
+        .video-badge {
+            position: absolute; top: 6px; right: 6px;
+            background: rgba(220,38,38,0.9); color: #fff;
+            font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 700;
         }
         .status-badge {
-            position: absolute;
-            bottom: 6px;
-            left: 6px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 20px;
+            position: absolute; bottom: 6px; left: 6px;
+            background: rgba(0,0,0,0.7); color: #fff;
+            font-size: 10px; padding: 2px 10px; border-radius: 20px;
         }
-
-        .card-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 2px;
-        }
-        .car-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .price {
-            color: #d4af37;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .card-actions {
-            padding: 0 12px 12px;
-        }
+        .card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+        .car-name { font-size: 16px; font-weight: 700; color: #fff; }
+        .price { color: #d4af37; font-size: 18px; font-weight: 700; }
+        .card-actions { padding: 0 12px 12px; }
         .btn-details {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            background: #1a1a3a;
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
+            width: 100%; padding: 10px; border-radius: 10px;
+            border: none; background: #1a1a3a; color: #fff;
+            font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
             transition: 0.2s;
         }
-        .btn-details:hover {
-            background: #2a2a5a;
-        }
+        .btn-details:hover { background: #2a2a5a; }
+        .no-cars { text-align: center; color: #888; font-size: 16px; padding: 40px; }
 
-        .no-cars {
-            text-align: center;
-            color: #888;
-            font-size: 16px;
-            padding: 40px;
-        }
-
-        /* ===== مودال التفاصيل ===== */
+        /* مودال التفاصيل */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 200;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.95); z-index: 200;
+            display: none; align-items: center; justify-content: center;
         }
-        .modal-overlay.open {
-            display: flex;
-        }
+        .modal-overlay.open { display: flex; }
         .modal-content {
-            background: #0a0a1a;
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
-            overflow-y: auto;
-            position: relative;
-            animation: slideUp 0.3s ease;
+            background: #0a0a1a; width: 100%; max-width: 480px; height: 100vh;
+            overflow-y: auto; position: relative; animation: slideUp 0.3s ease;
         }
-        @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* ===== سلايدر الصور ===== */
         .slider-container {
-            position: relative;
-            width: 100%;
-            height: 280px;
-            overflow: hidden;
-            background: #00000d;
+            position: relative; width: 100%; height: 280px;
+            overflow: hidden; background: #00000d; cursor: pointer;
         }
-        .slider-slides {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.4s ease-in-out;
-        }
-        .slider-slide {
-            min-width: 100%;
-            width: 100%;
-            height: 100%;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .slider-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+        .slider-slides { display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; }
+        .slider-slide { min-width: 100%; height: 100%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #000; cursor: pointer; }
+        .slider-slide img, .slider-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .video-slide-indicator {
+            position: absolute; top: 10px; left: 10px;
+            background: rgba(220,38,38,0.9); color: #fff;
+            font-size: 11px; padding: 4px 10px; border-radius: 20px; z-index: 5; font-weight: 700;
         }
         .slider-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 5;
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px; z-index: 5;
         }
         .slider-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            border: none;
+            width: 10px; height: 10px; border-radius: 50%;
+            background: rgba(255,255,255,0.3); cursor: pointer; border: none;
             transition: background 0.2s;
         }
-        .slider-dot.active {
-            background: #d4af37;
-        }
+        .slider-dot.active { background: #d4af37; }
         .slider-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            z-index: 5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.6); color: #fff; border: none;
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            font-size: 22px; z-index: 5; display: flex; align-items: center; justify-content: center;
         }
-        .slider-arrow.prev {
-            left: 10px;
-        }
-        .slider-arrow.next {
-            right: 10px;
-        }
+        .slider-arrow:hover { background: rgba(0,0,0,0.85); }
+        .slider-arrow.prev { left: 8px; }
+        .slider-arrow.next { right: 8px; }
         .slider-counter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #d4af37;
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            z-index: 5;
-            font-weight: 700;
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(0,0,0,0.7); color: #d4af37;
+            font-size: 12px; padding: 4px 12px; border-radius: 20px; z-index: 5; font-weight: 700;
         }
 
-        /* ===== محتوى المودال ===== */
+        .fullscreen-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.98); z-index: 999;
+            display: none; align-items: center; justify-content: center;
+            padding: 20px; flex-direction: column;
+        }
+        .fullscreen-overlay.open { display: flex; }
+        .fullscreen-overlay .fs-close {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(255,255,255,0.1); border: none; color: #fff;
+            width: 44px; height: 44px; border-radius: 50%;
+            font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;
+        }
+        .fs-image-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+        .fs-image-container img, .fs-image-container video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+        .fs-counter {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.6); color: #d4af37; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 700;
+        }
+        .fs-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.08); color: #fff; border: none;
+            width: 50px; height: 50px; border-radius: 50%; font-size: 26px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; z-index: 5;
+        }
+        .fs-arrow:hover { background: rgba(255,255,255,0.18); }
+        .fs-arrow.prev { left: 20px; }
+        .fs-arrow.next { right: 20px; }
+        .fs-type-badge {
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(220,38,38,0.8); color: #fff;
+            font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 700; z-index: 5;
+        }
+
         .modal-header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            background: #0a0a1a;
-            border-bottom: 1px solid #1a1a3a;
+            position: sticky; top: 0; z-index: 10;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 15px; background: #0a0a1a; border-bottom: 1px solid #1a1a3a;
         }
-        .modal-header .brand {
-            color: #d4af37;
-            font-size: 18px;
-            font-weight: 700;
-        }
+        .modal-header .brand { color: #d4af37; font-size: 18px; font-weight: 700; }
         .close-x {
-            background: rgba(255, 255, 255, 0.08);
-            border: none;
-            color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 18px;
+            background: rgba(255,255,255,0.08); border: none; color: #fff;
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px;
         }
-
-        .modal-body {
-            padding: 18px 15px 100px;
-        }
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #d4af37;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-        .modal-price {
-            font-size: 22px;
-            font-weight: 700;
-            color: #d4af37;
-            text-align: center;
-            margin-bottom: 18px;
-        }
-
-        /* ===== المواصفات الأساسية (4 فقط) ===== */
-        .specs-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-        .spec-box {
-            background: #0f0f22;
-            border-radius: 12px;
-            padding: 14px 10px;
-            text-align: center;
-            border: 1px solid #1a1a3a;
-            transition: 0.2s;
-        }
-        .spec-box:hover {
-            border-color: #d4af37;
-        }
-        .spec-box .spec-icon {
-            font-size: 18px;
-            margin-bottom: 4px;
-        }
-        .spec-box .spec-label {
-            font-size: 11px;
-            color: #999;
-            margin-bottom: 2px;
-            letter-spacing: 0.5px;
-        }
-        .spec-box .spec-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .spec-box .spec-value.gold {
-            color: #d4af37;
-        }
-
-        /* ===== مربع الوصف ===== */
-        .desc-section {
-            margin-bottom: 18px;
-        }
-        .desc-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #d4af37;
-            margin-bottom: 8px;
-            border-right: 3px solid #d4af37;
-            padding-right: 8px;
-        }
+        .close-x:hover { background: rgba(255,255,255,0.15); }
+        .modal-body { padding: 18px 15px 100px; }
+        .modal-title { font-size: 18px; font-weight: 700; color: #d4af37; margin-bottom: 6px; text-align: center; }
+        .modal-price { font-size: 22px; font-weight: 700; color: #d4af37; text-align: center; margin-bottom: 18px; }
+        .desc-section { margin-bottom: 18px; }
+        .desc-title { font-size: 14px; font-weight: 700; color: #d4af37; margin-bottom: 8px; border-right: 3px solid #d4af37; padding-right: 8px; }
         .desc-text {
-            background: #0f0f22;
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 13px;
-            color: #ccc;
-            line-height: 1.8;
-            border: 1px solid #1a1a3a;
-            min-height: 60px;
+            background: #0f0f22; border-radius: 12px; padding: 18px 16px;
+            font-size: 14px; color: #ddd; line-height: 2;
+            border: 1px solid #1a1a3a; min-height: 80px; white-space: pre-wrap; word-wrap: break-word;
         }
 
-        /* ===== أزرار المودال ===== */
         .modal-actions {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            gap: 10px;
-            padding: 12px 15px;
-            background: #0a0a1a;
-            border-top: 1px solid #1a1a3a;
-            z-index: 20;
-            max-width: 480px;
-            margin: 0 auto;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            display: flex; gap: 10px; padding: 12px 15px;
+            background: #0a0a1a; border-top: 1px solid #1a1a3a; z-index: 20;
+            max-width: 480px; margin: 0 auto;
         }
         .modal-act-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: 0.2s;
+            flex: 1; padding: 12px 16px; border-radius: 14px; border: none;
+            font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+            transition: all 0.3s ease; letter-spacing: 0.5px;
+            position: relative; overflow: hidden;
         }
-        .modal-act-btn.work {
-            background: #d4af37;
-            color: #000;
+        .modal-act-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.5s ease;
         }
-        .modal-act-btn.work:hover {
-            background: #c5a030;
-            transform: scale(1.02);
-        }
-        .modal-act-btn.sold {
-            background: #22c55e;
-            color: #fff;
-        }
-        .modal-act-btn.sold:hover {
-            background: #1a9e4a;
-        }
-        .modal-act-btn.danger {
-            background: #dc2626;
-            color: #fff;
-        }
-        .modal-act-btn.danger:hover {
-            background: #b91c1c;
-        }
-        .modal-act-btn.close-btn {
-            background: #555;
-            color: #fff;
-        }
-        .modal-act-btn.close-btn:hover {
-            background: #666;
-        }
-        .loading-modal {
-            text-align: center;
-            padding: 80px 20px;
-            color: #888;
-        }
+        .modal-act-btn:hover::after { left: 100%; }
+        .modal-act-btn.work { background: linear-gradient(135deg, #d4af37, #c5a030); color: #000; box-shadow: 0 4px 20px rgba(212,175,55,0.25); }
+        .modal-act-btn.sold { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 4px 20px rgba(34,197,94,0.25); }
+        .modal-act-btn.danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 4px 20px rgba(239,68,68,0.25); }
+        .modal-act-btn.close-btn { background: linear-gradient(135deg, #555, #444); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .modal-act-btn:hover { transform: translateY(-2px); }
+        .work-status-banner { background: #1a2a1a; border: 1px solid #d4af37; border-radius: 12px; padding: 12px; margin-bottom: 14px; text-align: center; }
+        .work-status-banner .title { color: #d4af37; font-weight: 700; }
+        .sold-status-banner { background: #2a1a1a; border: 1px solid #ef4444; border-radius: 12px; padding: 12px; margin-bottom: 14px; text-align: center; }
+        .sold-status-banner .title { color: #ef4444; font-weight: 700; }
 
-        /* ===== حالة العمل في المودال ===== */
-        .work-status-banner {
-            background: #1a2a1a;
-            border: 1px solid #d4af37;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-        .work-status-banner .title {
-            color: #d4af37;
-            font-weight: 700;
-        }
-        .work-status-banner .sub {
-            color: #aaa;
-            font-size: 13px;
-        }
-        .sold-status-banner {
-            background: #2a1a1a;
-            border: 1px solid #dc2626;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-        .sold-status-banner .title {
-            color: #dc2626;
-            font-weight: 700;
-        }
-
-        /* ===== الشريط السفلي ===== */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #00000d;
-            border-top: 1px solid #1a1a3a;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0 12px;
-            z-index: 100;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #00000d; border-top: 1px solid #1a1a3a;
+            display: flex; justify-content: space-around; padding: 8px 0 12px; z-index: 100;
         }
         .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            color: #888;
-            font-size: 11px;
-            text-decoration: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px 12px;
-            border-radius: 8px;
-            transition: 0.2s;
-            font-family: inherit;
-            position: relative;
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            color: #888; font-size: 11px; text-decoration: none; background: none;
+            border: none; cursor: pointer; padding: 4px 12px; border-radius: 8px;
+            transition: 0.2s; font-family: inherit; position: relative;
         }
-        .nav-item.active {
-            color: #d4af37;
-        }
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            stroke: currentColor;
-            stroke-width: 1.8;
-            fill: none;
-        }
-        .nav-item.active svg {
-            stroke: #d4af37;
-        }
-        .nav-item:hover {
-            color: #d4af37;
-        }
+        .nav-item.active { color: #d4af37; }
+        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 1.8; fill: none; }
+        .nav-item.active svg { stroke: #d4af37; }
         .badge-count {
-            position: absolute;
-            top: -4px;
-            right: -6px;
-            background: #d4af37;
-            color: #000;
-            font-size: 10px;
-            font-weight: 700;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute; top: -4px; right: -6px;
+            background: #d4af37; color: #000; font-size: 10px; font-weight: 700;
+            width: 18px; height: 18px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        /* ===== مودال البحث ===== */
+        /* مودال البحث الذكي */
         .search-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.88);
-            z-index: 300;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(16px);
+            z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px;
         }
-        .search-modal-overlay.open {
-            display: flex;
-        }
+        .search-modal-overlay.open { display: flex; }
         .search-modal-box {
-            background: #0a0a1a;
-            border-radius: 24px;
-            padding: 30px 24px;
-            max-width: 440px;
-            width: 100%;
-            border: 1px solid #1a1a3a;
-            animation: slideUp 0.25s ease;
+            background: linear-gradient(145deg, #1a1410, #120d09);
+            border: 1.5px solid rgba(139,107,74,0.3);
+            border-radius: 28px; padding: 35px 30px; max-width: 460px; width: 100%;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            animation: slideUp 0.3s ease;
         }
-        .search-modal-box h3 {
-            color: #d4af37;
-            font-size: 20px;
-            margin-bottom: 18px;
-            text-align: center;
-        }
-        .search-modal-box .field {
-            margin-bottom: 12px;
-        }
-        .search-modal-box .field label {
-            display: block;
-            font-size: 12px;
-            color: #aaa;
-            margin-bottom: 4px;
-        }
+        .search-modal-box h3 { color: #d4af37; font-size: 22px; margin-bottom: 20px; text-align: center; font-weight: 700; }
+        .search-modal-box .field { margin-bottom: 14px; }
+        .search-modal-box .field label { display: block; font-size: 12px; color: #aaa; margin-bottom: 5px; font-weight: 600; }
         .search-modal-box .field input,
         .search-modal-box .field select {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1px solid #1a1a3a;
-            background: #00000d;
-            color: #fff;
-            font-size: 14px;
-            font-family: inherit;
-            outline: none;
-            transition: 0.2s;
+            width: 100%; padding: 13px 16px; border-radius: 14px;
+            border: 1.5px solid rgba(139,107,74,0.2);
+            background: rgba(0,0,0,0.4); color: #fff; font-size: 14px; font-family: inherit;
+            outline: none; transition: 0.3s;
         }
         .search-modal-box .field input:focus,
-        .search-modal-box .field select:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
-        }
-        .search-modal-box .search-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 18px;
-        }
+        .search-modal-box .field select:focus { border-color: #d4af37; box-shadow: 0 0 0 4px rgba(212,175,55,0.08); }
+        .search-modal-box .field input::placeholder { color: #555; }
+        .search-modal-box .search-actions { display: flex; gap: 12px; margin-top: 20px; }
         .search-modal-box .search-actions button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 14px;
-            border: none;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: 0.2s;
+            flex: 1; padding: 14px; border-radius: 16px; border: none;
+            font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+            transition: all 0.3s ease;
         }
-        .btn-search-go {
-            background: #d4af37;
-            color: #000;
-        }
-        .btn-search-go:hover {
-            background: #c5a030;
-        }
-        .btn-search-cancel {
-            background: #1a1a3a;
-            color: #fff;
-        }
-        .btn-search-cancel:hover {
-            background: #2a2a5a;
-        }
+        .btn-search-go { background: linear-gradient(135deg, #d4af37, #c5a030); color: #000; box-shadow: 0 4px 20px rgba(212,175,55,0.2); }
+        .btn-search-go:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,175,55,0.35); }
+        .btn-search-cancel { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.08); }
+        .btn-search-cancel:hover { background: rgba(255,255,255,0.12); }
 
-        /* ===== مودال بدأ العمل ===== */
-        .work-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 400;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .work-modal-overlay.open {
-            display: flex;
-        }
-        .work-modal-box {
-            background: #0a0a1a;
-            border-radius: 24px;
-            padding: 30px 24px;
-            max-width: 400px;
-            width: 100%;
-            border: 1px solid #d4af37;
-            animation: slideUp 0.25s ease;
-        }
-        .work-modal-box h3 {
-            color: #d4af37;
-            font-size: 20px;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-        .work-modal-box .sub {
-            text-align: center;
-            color: #aaa;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
-        .work-modal-box input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #1a1a3a;
-            background: #00000d;
-            color: #fff;
-            font-size: 16px;
-            font-family: inherit;
-            outline: none;
-            text-align: center;
-            margin-bottom: 14px;
-        }
-        .work-modal-box input:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-        }
-        .work-modal-box .work-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .work-modal-box .work-actions button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 14px;
-            border: none;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: 0.2s;
-        }
-        .btn-work-confirm {
-            background: #d4af37;
-            color: #000;
-        }
-        .btn-work-confirm:hover {
-            background: #c5a030;
-        }
-        .btn-work-cancel {
-            background: #1a1a3a;
-            color: #fff;
-        }
-        .btn-work-cancel:hover {
-            background: #2a2a5a;
-        }
-
-        /* ===== مودال تأكيد البيع ===== */
-        .confirm-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .confirm-modal-overlay.open {
-            display: flex;
-        }
-        .confirm-modal-box {
-            background: #0a0a1a;
-            border-radius: 24px;
-            padding: 30px 24px;
-            max-width: 400px;
-            width: 100%;
-            border: 1px solid #d4af37;
-            animation: slideUp 0.25s ease;
-            text-align: center;
-        }
-        .confirm-modal-box h3 {
-            color: #d4af37;
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-        .confirm-modal-box p {
-            color: #ccc;
-            font-size: 14px;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .confirm-modal-box .confirm-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .confirm-modal-box .confirm-actions button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 14px;
-            border: none;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: 0.2s;
-        }
-        .btn-confirm-yes {
-            background: #22c55e;
-            color: #fff;
-        }
-        .btn-confirm-yes:hover {
-            background: #1a9e4a;
-        }
-        .btn-confirm-no {
-            background: #dc2626;
-            color: #fff;
-        }
-        .btn-confirm-no:hover {
-            background: #b91c1c;
-        }
-
-        /* ===== واجهة الإحصائيات ===== */
-        .stats-panel {
-            max-width: 800px;
-            margin: 0 auto 20px;
-            padding: 0 15px;
-            display: none;
-        }
-        .stats-panel.show {
-            display: block;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        .stat-item {
-            background: #0a0a1a;
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid #1a1a3a;
-            transition: 0.2s;
-        }
-        .stat-item:hover {
-            border-color: #d4af37;
-        }
-        .stat-item .num {
-            font-size: 28px;
-            font-weight: 700;
-            color: #d4af37;
-        }
-        .stat-item .label {
-            font-size: 12px;
-            color: #888;
-            margin-top: 4px;
-        }
-        .stat-item .sub {
-            font-size: 11px;
-            color: #666;
-            margin-top: 2px;
-        }
-
-        /* ===== واجهة شنطة العمل ===== */
-        .bag-panel {
-            max-width: 800px;
-            margin: 0 auto 20px;
-            padding: 0 15px;
-            display: none;
-        }
-        .bag-panel.show {
-            display: block;
-        }
-        .bag-panel h3 {
-            color: #d4af37;
-            font-size: 18px;
-            margin-bottom: 12px;
-        }
-        .bag-panel .empty-msg {
-            text-align: center;
-            color: #666;
-            padding: 30px;
-        }
+        .bag-panel { max-width: 800px; margin: 0 auto 20px; padding: 0 15px; display: none; }
+        .bag-panel.show { display: block; }
+        .bag-panel h3 { color: #d4af37; font-size: 18px; margin-bottom: 12px; }
+        .bag-panel .empty-msg { text-align: center; color: #666; padding: 30px; }
 
         @media (max-width: 600px) {
-            .card-top {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            .car-img-wrap {
-                width: 100%;
-                height: 160px;
-                order: 0;
-            }
-            .card-info {
-                flex: 1;
-                min-width: 150px;
-            }
-            .top-bar {
-                padding: 12px 16px 8px;
-            }
-            .logo {
-                font-size: 19px;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .specs-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .car-img-wrap { width: 100%; height: 160px; }
+            .card-info { flex: 1; min-width: 150px; }
+            .top-bar { padding: 12px 16px 8px; }
+            .logo { font-size: 19px; }
+            .fs-arrow { width: 40px; height: 40px; font-size: 20px; }
+            .fs-arrow.prev { left: 8px; }
+            .fs-arrow.next { right: 8px; }
+            .slider-arrow { width: 34px; height: 34px; font-size: 18px; }
+            .modal-act-btn { padding: 10px 12px; font-size: 13px; }
+            .search-modal-box { padding: 25px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- شريط علوي -->
     <div class="top-bar">
         <div class="logo">CarSales</div>
-        <div class="page-title">معرض السيارات</div>
+        <div class="page-title">معرض السيارات الذكي</div>
     </div>
 
-    <!-- ===== واجهة الإحصائيات ===== -->
-    <div class="stats-panel" id="statsPanel">
-        <div class="stats-grid">
-            <div class="stat-item"><div class="num" id="statTotal">0</div><div class="label">إجمالي السيارات</div></div>
-            <div class="stat-item"><div class="num" id="statWorking">0</div><div class="label">قيد العمل</div><div class="sub">في شنطة العمل</div></div>
-            <div class="stat-item"><div class="num" id="statSold">0</div><div class="label">تم البيع</div><div class="sub">نهائياً</div></div>
-        </div>
-    </div>
-
-    <!-- ===== واجهة شنطة العمل ===== -->
     <div class="bag-panel" id="bagPanel">
         <h3>👜 شنطة العمل</h3>
-        <div id="bagContent">
-            <div class="empty-msg">لا توجد سيارات في شنطة العمل</div>
-        </div>
+        <div id="bagContent"><div class="empty-msg">لا توجد سيارات في شنطة العمل</div></div>
     </div>
 
-    <!-- معرض السيارات -->
     <div class="gallery" id="gallery">
         <p class="no-cars" id="loadingText">جاري تحميل السيارات...</p>
     </div>
 
-    <!-- ===== مودال البحث ===== -->
+    <!-- مودال البحث الذكي -->
     <div class="search-modal-overlay" id="searchModal">
         <div class="search-modal-box">
-            <h3>🔍 بحث متقدم</h3>
+            <h3>🔍 بحث ذكي متقدم</h3>
             <div class="field">
-                <label>اسم السيارة / الموديل</label>
-                <input type="text" id="searchName" placeholder="مثال: BMW X7">
+                <label>اسم السيارة / الموديل / أي كلمة</label>
+                <input type="text" id="searchName" placeholder="مثال: شيف, BMW, 2007, أو أي وصف">
             </div>
             <div class="field">
                 <label>السعر من</label>
@@ -921,53 +332,74 @@
                 <input type="number" id="searchPriceTo" placeholder="1000000">
             </div>
             <div class="field">
-                <label>السنة</label>
-                <input type="text" id="searchYear" placeholder="2023">
+                <label>السنة / الموديل (رقم)</label>
+                <input type="text" id="searchYear" placeholder="مثال: 2023 أو 23 أو 7">
             </div>
             <div class="field">
                 <label>اللون</label>
-                <input type="text" id="searchColor" placeholder="أسود، أبيض">
+                <input type="text" id="searchColor" placeholder="أسود، أبيض، أحمر">
             </div>
             <div class="search-actions">
-                <button class="btn-search-go" id="searchGoBtn">🔍 بحث</button>
+                <button class="btn-search-go" id="searchGoBtn">🔍 بحث ذكي</button>
                 <button class="btn-search-cancel" id="searchCancelBtn">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- ===== مودال بدأ العمل ===== -->
-    <div class="work-modal-overlay" id="workModal">
-        <div class="work-modal-box">
-            <h3>💼 بدأ العمل</h3>
-            <div class="sub">متوقع أن تبيع هذه السيارة خلال كم يوم؟</div>
-            <input type="number" id="workDays" placeholder="مثال: 5" min="1" max="30">
-            <div class="work-actions">
-                <button class="btn-work-confirm" id="workConfirmBtn">موافق</button>
-                <button class="btn-work-cancel" id="workCancelBtn">إلغاء</button>
+    <!-- مودال بدأ العمل -->
+    <div class="work-modal-overlay" id="workModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(16px); z-index:400; align-items:center; justify-content:center; padding:20px;">
+        <div class="work-modal-box" style="background:linear-gradient(145deg,#1a1410,#120d09); border:1.5px solid rgba(212,175,55,0.3); border-radius:28px; padding:35px 30px; max-width:420px; width:100%; box-shadow:0 40px 80px rgba(0,0,0,0.8); text-align:center;">
+            <h3 style="color:#d4af37; font-size:22px; margin-bottom:8px;">💼 بدأ العمل</h3>
+            <div class="sub" style="color:#aaa; font-size:14px; margin-bottom:20px;">متوقع أن تبيع هذه السيارة خلال كم يوم؟</div>
+            <input type="number" id="workDays" placeholder="مثال: 5" min="1" max="30" style="width:100%; padding:14px; border-radius:14px; border:1.5px solid rgba(139,107,74,0.2); background:rgba(0,0,0,0.4); color:#fff; font-size:16px; font-family:inherit; outline:none; text-align:center; margin-bottom:16px;">
+            <div class="work-actions" style="display:flex; gap:12px;">
+                <button class="btn-work-confirm" id="workConfirmBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:linear-gradient(135deg,#d4af37,#c5a030); color:#000;">موافق</button>
+                <button class="btn-work-cancel" id="workCancelBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.08);">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- ===== مودال تأكيد البيع ===== -->
-    <div class="confirm-modal-overlay" id="confirmModal">
-        <div class="confirm-modal-box">
-            <h3>✅ تأكيد البيع</h3>
-            <p id="confirmText">هل تم بيع هذه السيارة فعلاً؟</p>
-            <div class="confirm-actions">
-                <button class="btn-confirm-yes" id="confirmYesBtn">نعم، تم البيع</button>
-                <button class="btn-confirm-no" id="confirmNoBtn">لا، لم يتم</button>
+    <!-- مودال تأكيد البيع -->
+    <div class="sale-modal-overlay" id="saleModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(16px); z-index:500; align-items:center; justify-content:center; padding:20px;">
+        <div class="sale-modal-box" style="background:linear-gradient(145deg,#1a1410,#120d09); border:1.5px solid rgba(34,197,94,0.3); border-radius:28px; padding:35px 30px; max-width:420px; width:100%; text-align:center;">
+            <h3 style="color:#22c55e; font-size:22px; margin-bottom:8px;">💰 تأكيد البيع</h3>
+            <p id="saleConfirmText" style="color:#ccc; font-size:14px; margin-bottom:22px; line-height:1.7;">هل أنت متأكد من أن هذه السيارة قد تم بيعها فعلاً؟</p>
+            <div class="sale-actions" style="display:flex; gap:12px;">
+                <button class="btn-sale-yes" id="saleYesBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff;">نعم، تم البيع</button>
+                <button class="btn-sale-no" id="saleNoBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.08);">لا، تراجع</button>
             </div>
         </div>
     </div>
 
-    <!-- ===== مودال التفاصيل ===== -->
+    <!-- مودال إلغاء العمل -->
+    <div class="cancel-modal-overlay" id="cancelModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(16px); z-index:500; align-items:center; justify-content:center; padding:20px;">
+        <div class="cancel-modal-box" style="background:linear-gradient(145deg,#1a1410,#120d09); border:1.5px solid rgba(239,68,68,0.3); border-radius:28px; padding:35px 30px; max-width:420px; width:100%; text-align:center;">
+            <h3 style="color:#ef4444; font-size:22px; margin-bottom:8px;">⚠️ تأكيد الإلغاء</h3>
+            <p style="color:#ccc; font-size:14px; margin-bottom:22px; line-height:1.7;">هل أنت متأكد من إلغاء العمل على هذه السيارة؟</p>
+            <div class="cancel-actions" style="display:flex; gap:12px;">
+                <button class="btn-cancel-yes" id="cancelYesBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff;">نعم، إلغاء</button>
+                <button class="btn-cancel-no" id="cancelNoBtn" style="flex:1; padding:14px; border-radius:16px; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.08);">لا، تراجع</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال تفاصيل السيارة -->
     <div class="modal-overlay" id="carModal">
         <div class="modal-content" id="modalContent">
-            <div class="loading-modal">جاري تحميل التفاصيل...</div>
+            <div class="loading-modal" style="text-align:center; padding:80px 20px; color:#888;">جاري تحميل التفاصيل...</div>
         </div>
     </div>
 
-    <!-- ===== الشريط السفلي ===== -->
+    <!-- عرض ملء الشاشة -->
+    <div class="fullscreen-overlay" id="fullscreenOverlay">
+        <button class="fs-close" id="fsClose">✕</button>
+        <button class="fs-arrow prev" id="fsPrevBtn">‹</button>
+        <button class="fs-arrow next" id="fsNextBtn">›</button>
+        <div class="fs-image-container" id="fsContainer"></div>
+        <div class="fs-counter" id="fsCounter">1 / 1</div>
+    </div>
+
+    <!-- الشريط السفلي -->
     <nav class="bottom-nav">
         <button class="nav-item active" id="navHome" onclick="goHome()">
             <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -976,10 +408,6 @@
         <button class="nav-item" id="navSearch" onclick="openSearchModal()">
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <span>بحث</span>
-        </button>
-        <button class="nav-item" id="navStats" onclick="showStatsUI()">
-            <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            <span>الإحصائيات</span>
         </button>
         <button class="nav-item" id="navBag" onclick="showBagUI()">
             <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -1011,13 +439,15 @@
         let carsData = {};
         let allCarsArray = [];
         let currentCarId = null;
+        let fsMediaArray = [];
+        let fsCurrentIndex = 0;
 
-        // ===== عناصر الواجهات =====
-        const statsPanel = document.getElementById('statsPanel');
         const bagPanel = document.getElementById('bagPanel');
         const bagContent = document.getElementById('bagContent');
+        const fsOverlay = document.getElementById('fullscreenOverlay');
+        const fsContainer = document.getElementById('fsContainer');
+        const fsCounter = document.getElementById('fsCounter');
 
-        // ===== دوال مساعدة =====
         function getAllImages(car) {
             let images = [];
             if (car.imageUrls && Array.isArray(car.imageUrls) && car.imageUrls.length > 0) {
@@ -1028,11 +458,118 @@
             return images.length > 0 ? images : ['https://via.placeholder.com/600x400?text=No+Image'];
         }
 
-        // ===== عرض الكاردات (صورة + اسم + سعر فقط) =====
-        function renderCars(data) {
-            gallery.innerHTML = "";
-            statsPanel.classList.remove('show');
+        function getAllVideos(car) {
+            let videos = [];
+            if (car.videoUrls && Array.isArray(car.videoUrls) && car.videoUrls.length > 0) {
+                videos = car.videoUrls.filter(url => url && url.length > 0);
+            }
+            return videos;
+        }
+
+        function hasVideo(car) { return getAllVideos(car).length > 0; }
+
+        function getAllMedia(car) {
+            const images = getAllImages(car);
+            const videos = getAllVideos(car);
+            const media = [];
+            images.forEach(url => media.push({ type: 'image', url }));
+            videos.forEach(url => media.push({ type: 'video', url }));
+            return media;
+        }
+
+        // ===== البحث الذكي الشامل جداً =====
+        function smartSearch(query, text) {
+            if (!query || !text) return false;
+            const q = query.toLowerCase().trim();
+            const t = text.toLowerCase().trim();
+            
+            // 1. البحث المباشر
+            if (t.includes(q)) return true;
+            
+            // 2. البحث بالكلمات المنفصلة (أي كلمة من كلمات البحث موجودة)
+            const words = q.split(/\s+/);
+            for (let word of words) {
+                if (word.length > 1 && t.includes(word)) return true;
+            }
+            
+            // 3. البحث بالحروف المتتابعة (مثلاً: "شف" تبحث عن "شيفروليه")
+            // نأخذ أول 3 حروف من الاستعلام ونبحث عنها
+            if (q.length >= 2) {
+                const prefix = q.substring(0, Math.min(q.length, 3));
+                if (t.includes(prefix)) return true;
+            }
+            
+            return false;
+        }
+
+        // دالة بحث فائقة الذكاء - تبحث في كل الحقول
+        function isCarMatch(car, filters) {
+            // تجميع كل النصوص من السيارة في نص واحد للبحث الشامل
+            const allText = [
+                car.name || '',
+                car.model || '',
+                car.make || '',
+                car.color || '',
+                car.description || '',
+                String(car.year || '')
+            ].join(' ').toLowerCase();
+
+            // 1. البحث في النص الكامل (اسم + وصف + كل الحقول)
+            let nameMatch = true;
+            if (filters.name) {
+                const query = filters.name.toLowerCase().trim();
+                // البحث في النص الكامل
+                nameMatch = allText.includes(query) || smartSearch(query, allText);
+                
+                // محاولة إضافية: البحث في كل حقل على حدة
+                if (!nameMatch) {
+                    const fields = [car.name, car.model, car.make, car.color, car.description];
+                    for (let field of fields) {
+                        if (field && smartSearch(query, field)) {
+                            nameMatch = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 2. السعر
+            const price = parseFloat(String(car.price || '0').replace(/,/g, '')) || 0;
+            const priceFrom = parseFloat(filters.priceFrom) || 0;
+            const priceTo = parseFloat(filters.priceTo) || 0;
+            const priceMatch = price >= priceFrom && (priceTo === 0 || price <= priceTo);
+
+            // 3. السنة - بحث ذكي في النص الكامل أيضاً
+            let yearMatch = true;
+            if (filters.year && filters.year.trim()) {
+                const yearQuery = filters.year.trim();
+                const carYearStr = String(car.year || '');
+                const desc = String(car.description || '');
+                yearMatch = carYearStr.includes(yearQuery) || 
+                            desc.includes(yearQuery) ||
+                            smartSearch(yearQuery, carYearStr) ||
+                            smartSearch(yearQuery, desc) ||
+                            allText.includes(yearQuery);
+            }
+
+            // 4. اللون - بحث ذكي
+            let colorMatch = true;
+            if (filters.color && filters.color.trim()) {
+                const colorQuery = filters.color.trim();
+                const carColor = String(car.color || '');
+                const desc = String(car.description || '');
+                colorMatch = smartSearch(colorQuery, carColor) || 
+                            smartSearch(colorQuery, desc) ||
+                            allText.includes(colorQuery.toLowerCase());
+            }
+
+            return nameMatch && priceMatch && yearMatch && colorMatch;
+        }
+
+        function renderCars(data, searchFilters = null) {
+            gallery.style.display = 'block';
             bagPanel.classList.remove('show');
+            gallery.innerHTML = "";
 
             if (!data || Object.keys(data).length === 0) {
                 gallery.innerHTML = '<p class="no-cars">🚗 لا توجد سيارات منشورة حالياً.</p>';
@@ -1043,15 +580,21 @@
             allCarsArray = entries.map(([key, car]) => ({ key, car }));
 
             let visibleEntries = entries.filter(([key, car]) => {
+                // استبعاد السيارات قيد العمل والمباعة
                 if (car.workStatus === 'working') return false;
                 if (car.sold === true) return false;
+                
+                if (searchFilters) {
+                    return isCarMatch(car, searchFilters);
+                }
                 return true;
             });
 
+            // ترتيب حسب الأحدث
             visibleEntries.sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
 
             if (visibleEntries.length === 0) {
-                gallery.innerHTML = '<p class="no-cars">🚗 لا توجد سيارات متاحة حالياً.</p>';
+                gallery.innerHTML = '<p class="no-cars">🔍 لا توجد سيارات تطابق معايير البحث الذكي.</p>';
                 return;
             }
 
@@ -1063,12 +606,14 @@
 
                 const allImages = getAllImages(car);
                 const thumb = allImages[0];
+                const carHasVideo = hasVideo(car);
 
                 card.innerHTML = `
                     <div class="card-top">
                         <div class="car-img-wrap">
                             <img src="${thumb}" alt="${car.name || 'سيارة'}" loading="lazy">
                             ${allImages.length > 1 ? `<span class="img-count">+${allImages.length}</span>` : ''}
+                            ${carHasVideo ? `<span class="video-badge">▶️ فيديو</span>` : ''}
                             <span class="status-badge">${car.status || 'متاحة'}</span>
                         </div>
                         <div class="card-info">
@@ -1083,41 +628,21 @@
                 gallery.appendChild(card);
             });
 
-            updateStats();
             updateBagCount();
         }
 
-        // ===== تحديث الإحصائيات =====
-        function updateStats() {
-            const total = allCarsArray.length;
-            const working = allCarsArray.filter(({ car }) => car.workStatus === 'working' && car.sold !== true).length;
-            const sold = allCarsArray.filter(({ car }) => car.sold === true).length;
-
-            document.getElementById('statTotal').textContent = total;
-            document.getElementById('statWorking').textContent = working;
-            document.getElementById('statSold').textContent = sold;
-        }
-
-        // ===== عرض واجهة الإحصائيات =====
-        window.showStatsUI = function() {
-            statsPanel.classList.toggle('show');
-            bagPanel.classList.remove('show');
-            gallery.style.display = statsPanel.classList.contains('show') ? 'none' : 'block';
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('navStats').classList.add('active');
-            updateStats();
-        };
-
-        // ===== عرض واجهة شنطة العمل =====
         window.showBagUI = function() {
             const workingCars = allCarsArray.filter(({ car }) => car.workStatus === 'working' && car.sold !== true);
-
-            bagPanel.classList.toggle('show');
-            statsPanel.classList.remove('show');
-            gallery.style.display = bagPanel.classList.contains('show') ? 'none' : 'block';
+            bagPanel.classList.add('show');
+            gallery.style.display = 'none';
 
             if (workingCars.length === 0) {
                 bagContent.innerHTML = '<div class="empty-msg">👜 لا توجد سيارات في شنطة العمل</div>';
+                setTimeout(() => {
+                    if (bagPanel.classList.contains('show') && allCarsArray.filter(({ car }) => car.workStatus === 'working' && car.sold !== true).length === 0) {
+                        goHome();
+                    }
+                }, 1500);
             } else {
                 bagContent.innerHTML = '';
                 workingCars.forEach(({ key, car }) => {
@@ -1127,6 +652,7 @@
                     div.onclick = () => openModal(key);
                     const allImages = getAllImages(car);
                     const thumb = allImages[0];
+                    const carHasVideo = hasVideo(car);
                     const days = car.workDays || '?';
                     const startDate = car.workStartDate ? new Date(car.workStartDate).toLocaleDateString('ar-EG') : 'غير معروف';
 
@@ -1134,6 +660,7 @@
                         <div class="card-top">
                             <div class="car-img-wrap">
                                 <img src="${thumb}" alt="${car.name || 'سيارة'}" loading="lazy">
+                                ${carHasVideo ? `<span class="video-badge">▶️ فيديو</span>` : ''}
                                 <span class="status-badge">💼 قيد العمل</span>
                             </div>
                             <div class="card-info">
@@ -1155,7 +682,6 @@
             updateBagCount();
         };
 
-        // ===== تحديث عدد شنطة العمل =====
         function updateBagCount() {
             const count = allCarsArray.filter(({ car }) => car.workStatus === 'working' && car.sold !== true).length;
             const bagCount = document.getElementById('bagCount');
@@ -1167,77 +693,21 @@
             }
         }
 
-        // ===== البحث المتقدم =====
         function advancedSearch() {
-            const nameQ = document.getElementById('searchName').value.trim().toLowerCase();
-            const priceFrom = parseFloat(document.getElementById('searchPriceFrom').value) || 0;
-            const priceTo = parseFloat(document.getElementById('searchPriceTo').value) || Infinity;
-            const yearQ = document.getElementById('searchYear').value.trim().toLowerCase();
-            const colorQ = document.getElementById('searchColor').value.trim().toLowerCase();
+            const filters = {
+                name: document.getElementById('searchName').value.trim(),
+                priceFrom: parseFloat(document.getElementById('searchPriceFrom').value) || 0,
+                priceTo: parseFloat(document.getElementById('searchPriceTo').value) || 0,
+                year: document.getElementById('searchYear').value.trim(),
+                color: document.getElementById('searchColor').value.trim()
+            };
 
-            const filtered = allCarsArray.filter(({ car }) => {
-                if (car.workStatus === 'working') return false;
-                if (car.sold === true) return false;
-
-                const name = (car.name || '').toLowerCase();
-                const make = (car.make || '').toLowerCase();
-                const model = (car.model || '').toLowerCase();
-                const year = String(car.year || '').toLowerCase();
-                const color = (car.color || '').toLowerCase();
-                const price = parseFloat(car.price) || 0;
-
-                let nameMatch = true;
-                if (nameQ) {
-                    nameMatch = name.includes(nameQ) || make.includes(nameQ) || model.includes(nameQ);
-                }
-                let priceMatch = (price >= priceFrom && price <= priceTo);
-                let yearMatch = true;
-                if (yearQ) yearMatch = year.includes(yearQ);
-                let colorMatch = true;
-                if (colorQ) colorMatch = color.includes(colorQ);
-
-                return nameMatch && priceMatch && yearMatch && colorMatch;
-            });
-
-            statsPanel.classList.remove('show');
             bagPanel.classList.remove('show');
-            gallery.style.display = 'block';
-
-            if (filtered.length === 0) {
-                gallery.innerHTML = '<p class="no-cars">🔍 لا توجد سيارات تطابق معايير البحث.</p>';
-                return;
-            }
-
-            gallery.innerHTML = "";
-            filtered.forEach(({ key, car }, index) => {
-                const isFeatured = index === 0;
-                const card = document.createElement('div');
-                card.className = 'car-card' + (isFeatured ? ' featured' : '');
-                card.onclick = () => openModal(key);
-                const allImages = getAllImages(car);
-                const thumb = allImages[0];
-
-                card.innerHTML = `
-                    <div class="card-top">
-                        <div class="car-img-wrap">
-                            <img src="${thumb}" alt="${car.name || 'سيارة'}" loading="lazy">
-                            ${allImages.length > 1 ? `<span class="img-count">+${allImages.length}</span>` : ''}
-                            <span class="status-badge">${car.status || 'متاحة'}</span>
-                        </div>
-                        <div class="card-info">
-                            <div class="car-name">${car.name || 'سيارة'}</div>
-                            <div class="price">${car.price || '0'} ج.م</div>
-                        </div>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn-details" onclick="event.stopPropagation(); openModal('${key}')">التفاصيل</button>
-                    </div>
-                `;
-                gallery.appendChild(card);
-            });
+            renderCars(carsData, filters);
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('navSearch').classList.add('active');
         }
 
-        // ===== مودال البحث =====
         const searchModal = document.getElementById('searchModal');
 
         window.openSearchModal = function() {
@@ -1248,9 +718,6 @@
             document.getElementById('searchYear').value = '';
             document.getElementById('searchColor').value = '';
             document.getElementById('searchName').focus();
-            statsPanel.classList.remove('show');
-            bagPanel.classList.remove('show');
-            gallery.style.display = 'block';
         };
 
         document.getElementById('searchCancelBtn').addEventListener('click', () => {
@@ -1259,27 +726,23 @@
         document.getElementById('searchGoBtn').addEventListener('click', () => {
             advancedSearch();
             searchModal.classList.remove('open');
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('navSearch').classList.add('active');
         });
-
         searchModal.addEventListener('click', (e) => {
             if (e.target === searchModal) searchModal.classList.remove('open');
         });
 
-        // ===== مودال بدأ العمل =====
+        // ===== Work Modal =====
         const workModal = document.getElementById('workModal');
         const workDaysInput = document.getElementById('workDays');
 
         window.startWork = function(carId) {
             currentCarId = carId;
-            workModal.classList.add('open');
-            workDaysInput.value = '';
+            workModal.style.display = 'flex';
             workDaysInput.focus();
         };
 
         document.getElementById('workCancelBtn').addEventListener('click', () => {
-            workModal.classList.remove('open');
+            workModal.style.display = 'none';
             currentCarId = null;
         });
 
@@ -1289,7 +752,6 @@
                 alert('الرجاء إدخال عدد أيام صحيح (1-30)');
                 return;
             }
-
             if (!currentCarId) {
                 alert('حدث خطأ، يرجى المحاولة مرة أخرى');
                 return;
@@ -1303,14 +765,9 @@
                     workStartDate: Date.now(),
                     sold: false
                 });
-
-                workModal.classList.remove('open');
-                currentCarId = null;
-                renderCars(carsData);
-                updateBagCount();
-                if (bagPanel.classList.contains('show')) {
-                    showBagUI();
-                }
+                workModal.style.display = 'none';
+                closeModal();
+                setTimeout(() => { showBagUI(); }, 300);
             } catch (err) {
                 console.error(err);
                 alert('حدث خطأ: ' + err.message);
@@ -1319,104 +776,139 @@
 
         workModal.addEventListener('click', (e) => {
             if (e.target === workModal) {
-                workModal.classList.remove('open');
+                workModal.style.display = 'none';
                 currentCarId = null;
             }
         });
 
-        // ===== مودال تأكيد البيع =====
-        const confirmModal = document.getElementById('confirmModal');
-        let confirmCarId = null;
+        // ===== Sale Modal =====
+        const saleModal = document.getElementById('saleModal');
+        let pendingSaleCarId = null;
 
-        window.showConfirmSale = function(carId) {
-            confirmCarId = carId;
-            document.getElementById('confirmText').textContent = 'هل تم بيع هذه السيارة فعلاً؟ (سيتم إخفاؤها من المعرض)';
-            confirmModal.classList.add('open');
+        window.showSaleConfirm = function(carId) {
+            pendingSaleCarId = carId;
+            saleModal.style.display = 'flex';
         };
 
-        document.getElementById('confirmYesBtn').addEventListener('click', async () => {
-            if (!confirmCarId) return;
+        document.getElementById('saleNoBtn').addEventListener('click', () => {
+            saleModal.style.display = 'none';
+            pendingSaleCarId = null;
+        });
+
+        document.getElementById('saleYesBtn').addEventListener('click', async () => {
+            if (!pendingSaleCarId) return;
             try {
-                const carRef = ref(db, 'cars/' + confirmCarId);
-                await update(carRef, {
-                    sold: true,
-                    workStatus: 'completed',
-                    soldDate: Date.now()
-                });
-                confirmModal.classList.remove('open');
-                renderCars(carsData);
-                updateBagCount();
-                confirmCarId = null;
-                if (bagPanel.classList.contains('show')) {
-                    showBagUI();
+                const carRef = ref(db, 'cars/' + pendingSaleCarId);
+                await update(carRef, { sold: true, workStatus: 'completed', soldDate: Date.now() });
+                saleModal.style.display = 'none';
+                closeModal();
+                const snapshot = await get(ref(db, 'cars'));
+                if (snapshot.exists()) {
+                    carsData = snapshot.val();
+                    allCarsArray = Object.entries(carsData).map(([key, car]) => ({ key, car }));
                 }
+                const workingCars = allCarsArray.filter(({ car }) => car.workStatus === 'working' && car.sold !== true);
+                if (workingCars.length > 0) { showBagUI(); } else { goHome(); }
+                updateBagCount();
             } catch (err) {
                 console.error(err);
                 alert('حدث خطأ: ' + err.message);
             }
         });
 
-        document.getElementById('confirmNoBtn').addEventListener('click', () => {
-            confirmModal.classList.remove('open');
-            confirmCarId = null;
-        });
-
-        confirmModal.addEventListener('click', (e) => {
-            if (e.target === confirmModal) {
-                confirmModal.classList.remove('open');
-                confirmCarId = null;
+        saleModal.addEventListener('click', (e) => {
+            if (e.target === saleModal) {
+                saleModal.style.display = 'none';
+                pendingSaleCarId = null;
             }
         });
 
-        // ===== أيقونة الرئيسية =====
+        // ===== Cancel Modal =====
+        const cancelModal = document.getElementById('cancelModal');
+        let pendingCancelCarId = null;
+
+        window.openCancelModal = function(carId) {
+            pendingCancelCarId = carId;
+            cancelModal.style.display = 'flex';
+        };
+
+        document.getElementById('cancelNoBtn').addEventListener('click', () => {
+            cancelModal.style.display = 'none';
+            pendingCancelCarId = null;
+        });
+
+        document.getElementById('cancelYesBtn').addEventListener('click', async () => {
+            if (!pendingCancelCarId) return;
+            try {
+                const carRef = ref(db, 'cars/' + pendingCancelCarId);
+                await update(carRef, { workStatus: null, workDays: null, workStartDate: null });
+                cancelModal.style.display = 'none';
+                closeModal();
+                const snapshot = await get(ref(db, 'cars'));
+                if (snapshot.exists()) {
+                    carsData = snapshot.val();
+                    allCarsArray = Object.entries(carsData).map(([key, car]) => ({ key, car }));
+                }
+                showBagUI();
+                updateBagCount();
+            } catch (err) {
+                console.error(err);
+                alert('حدث خطأ: ' + err.message);
+            }
+        });
+
+        cancelModal.addEventListener('click', (e) => {
+            if (e.target === cancelModal) {
+                cancelModal.style.display = 'none';
+                pendingCancelCarId = null;
+            }
+        });
+
         window.goHome = function() {
-            statsPanel.classList.remove('show');
             bagPanel.classList.remove('show');
-            gallery.style.display = 'block';
             renderCars(carsData);
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('navHome').classList.add('active');
         };
 
-        // ===== مودال التفاصيل =====
+        // ===== Modal Details =====
         async function openModal(carId) {
             carModal.classList.add('open');
             document.body.style.overflow = 'hidden';
-            modalContent.innerHTML = '<div class="loading-modal">⏳ جاري التحميل...</div>';
+            modalContent.innerHTML = '<div class="loading-modal" style="text-align:center; padding:80px 20px; color:#888;">⏳ جاري التحميل...</div>';
 
             try {
                 const snapshot = await get(ref(db, 'cars/' + carId));
                 if (!snapshot.exists()) {
-                    modalContent.innerHTML = '<div class="loading-modal" style="color:#f87171">السيارة غير موجودة.</div>';
+                    modalContent.innerHTML = '<div class="loading-modal" style="text-align:center; padding:80px 20px; color:#f87171;">السيارة غير موجودة.</div>';
                     return;
                 }
                 const car = snapshot.val();
                 const isWorking = car.workStatus === 'working' && car.sold !== true;
                 const isSold = car.sold === true;
 
-                // ===== المواصفات المطلوبة فقط =====
-                const yearVal = car.year || '-';
-                const kmVal = car.km === 'New' || car.km === '0' ? 'جديدة' : (car.km || '-');
-                const statusText = car.status || (car.km === 'New' || car.km === '0' ? 'جديدة' : 'مستعمل');
-                const colorVal = car.color || 'فضي';
+                const allMedia = getAllMedia(car);
+                const hasAnyVideo = allMedia.some(m => m.type === 'video');
 
-                // ===== صور السلايدر =====
-                const images = getAllImages(car);
                 let sliderHtml = '';
-                if (images.length > 0) {
-                    const slidesHtml = images.map((url, i) => `
-                        <div class="slider-slide"><img src="${url}" alt="صورة ${i+1}" loading="eager"></div>
-                    `).join('');
-                    const dotsHtml = images.map((_, i) => `
-                        <button class="slider-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></button>
-                    `).join('');
-                    const arrowsHtml = images.length > 1 ? `
+                if (allMedia.length > 0) {
+                    const slidesHtml = allMedia.map((media, i) => {
+                        if (media.type === 'video') {
+                            return `<div class="slider-slide" data-index="${i}"><video src="${media.url}" controls playsinline preload="metadata"></video></div>`;
+                        } else {
+                            return `<div class="slider-slide" data-index="${i}"><img src="${media.url}" alt="صورة ${i+1}" loading="eager"></div>`;
+                        }
+                    }).join('');
+                    const dotsHtml = allMedia.map((_, i) => `<button class="slider-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></button>`).join('');
+                    const arrowsHtml = allMedia.length > 1 ? `
                         <button class="slider-arrow prev" id="sliderPrev">‹</button>
                         <button class="slider-arrow next" id="sliderNext">›</button>
                     ` : '';
+                    const videoIndicator = hasAnyVideo ? `<div class="video-slide-indicator">▶️ يحتوي على فيديو</div>` : '';
                     sliderHtml = `
                         <div class="slider-container" id="sliderContainer">
-                            <div class="slider-counter" id="sliderCounter">1 / ${images.length}</div>
+                            ${videoIndicator}
+                            <div class="slider-counter" id="sliderCounter">1 / ${allMedia.length}</div>
                             <div class="slider-slides" id="sliderSlides">${slidesHtml}</div>
                             ${arrowsHtml}
                             <div class="slider-dots" id="sliderDots">${dotsHtml}</div>
@@ -1426,31 +918,20 @@
                     sliderHtml = `<div style="width:100%;height:280px;background:#00000d;display:flex;align-items:center;justify-content:center;color:#666;">لا توجد صور</div>`;
                 }
 
-                // ===== حالة العمل أو البيع =====
                 let statusBanner = '';
                 if (isWorking) {
                     const days = car.workDays || '?';
                     const startDate = car.workStartDate ? new Date(car.workStartDate).toLocaleDateString('ar-EG') : 'غير معروف';
-                    statusBanner = `
-                        <div class="work-status-banner">
-                            <div class="title">💼 قيد العمل</div>
-                            <div class="sub">متوقع البيع خلال ${days} يوم • بدأ: ${startDate}</div>
-                        </div>
-                    `;
+                    statusBanner = `<div class="work-status-banner"><div class="title">💼 قيد العمل</div><div class="sub" style="color:#aaa;">متوقع البيع خلال ${days} يوم • بدأ: ${startDate}</div></div>`;
                 } else if (isSold) {
-                    statusBanner = `
-                        <div class="sold-status-banner">
-                            <div class="title">✅ تم البيع</div>
-                        </div>
-                    `;
+                    statusBanner = `<div class="sold-status-banner"><div class="title">✅ تم البيع</div></div>`;
                 }
 
-                // ===== الأزرار =====
                 let buttonsHtml = '';
                 if (isWorking && !isSold) {
                     buttonsHtml = `
-                        <button class="modal-act-btn sold" onclick="showConfirmSale('${carId}')">💰 تم البيع</button>
-                        <button class="modal-act-btn danger" onclick="cancelWork('${carId}')">❌ إلغاء العمل</button>
+                        <button class="modal-act-btn sold" onclick="showSaleConfirm('${carId}')">💰 تم البيع</button>
+                        <button class="modal-act-btn danger" onclick="openCancelModal('${carId}')">❌ إلغاء العمل</button>
                     `;
                 } else if (!isWorking && !isSold) {
                     buttonsHtml = `
@@ -1458,15 +939,11 @@
                         <button class="modal-act-btn close-btn" onclick="closeModal()">إغلاق</button>
                     `;
                 } else {
-                    buttonsHtml = `
-                        <button class="modal-act-btn close-btn" onclick="closeModal()">إغلاق</button>
-                    `;
+                    buttonsHtml = `<button class="modal-act-btn close-btn" onclick="closeModal()">إغلاق</button>`;
                 }
 
-                // ===== الوصف =====
-                const descVal = car.description || 'سيارة ' + (car.name || '') + ' موديل ' + yearVal + ' بحالة ممتازة.';
+                const descVal = car.description || 'لا يوجد وصف لهذه السيارة.';
 
-                // ===== بناء المودال =====
                 modalContent.innerHTML = `
                     <div class="modal-header">
                         <div class="brand">CarSales</div>
@@ -1475,108 +952,69 @@
                     ${sliderHtml}
                     <div class="modal-body">
                         ${statusBanner}
-                        <div class="modal-title">${car.name || 'سيارة'} ${yearVal !== '-' ? yearVal : ''}</div>
+                        <div class="modal-title">${car.name || 'سيارة'}</div>
                         <div class="modal-price">${car.price || '0'} ج.م</div>
-
-                        <!-- ===== المواصفات الأساسية (4 فقط) ===== -->
-                        <div class="specs-grid">
-                            <div class="spec-box">
-                                <div class="spec-icon">🎨</div>
-                                <div class="spec-label">اللون</div>
-                                <div class="spec-value">${colorVal}</div>
-                            </div>
-                            <div class="spec-box">
-                                <div class="spec-icon">📏</div>
-                                <div class="spec-label">المسافة</div>
-                                <div class="spec-value">${kmVal}</div>
-                            </div>
-                            <div class="spec-box">
-                                <div class="spec-icon">🏷️</div>
-                                <div class="spec-label">الحالة</div>
-                                <div class="spec-value gold">${statusText}</div>
-                            </div>
-                            <div class="spec-box">
-                                <div class="spec-icon">📅</div>
-                                <div class="spec-label">الموديل</div>
-                                <div class="spec-value gold">${yearVal}</div>
-                            </div>
-                        </div>
-
-                        <!-- ===== مربع الوصف ===== -->
                         <div class="desc-section">
-                            <div class="desc-title">📄 الوصف</div>
+                            <div class="desc-title">📄 تفاصيل السيارة</div>
                             <div class="desc-text">${descVal}</div>
                         </div>
                     </div>
-                    <div class="modal-actions">
-                        ${buttonsHtml}
-                    </div>
+                    <div class="modal-actions">${buttonsHtml}</div>
                 `;
 
-                if (images.length > 1) {
-                    initSlider(images.length);
+                if (allMedia.length > 1) {
+                    initSlider(allMedia);
+                } else if (allMedia.length === 1) {
+                    const slide = document.querySelector('.slider-slide');
+                    if (slide) {
+                        slide.style.cursor = 'pointer';
+                        slide.addEventListener('click', () => openFullscreen(allMedia, 0));
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                modalContent.innerHTML = '<div class="loading-modal" style="color:#f87171">حدث خطأ في تحميل البيانات.</div>';
+                modalContent.innerHTML = '<div class="loading-modal" style="text-align:center; padding:80px 20px; color:#f87171;">حدث خطأ في تحميل البيانات.</div>';
             }
         }
 
-        // ===== إلغاء العمل =====
-        window.cancelWork = async function(carId) {
-            if (!confirm('هل أنت متأكد من إلغاء العمل على هذه السيارة؟')) return;
-            try {
-                const carRef = ref(db, 'cars/' + carId);
-                await update(carRef, {
-                    workStatus: null,
-                    workDays: null,
-                    workStartDate: null
-                });
-                closeModal();
-                renderCars(carsData);
-                updateBagCount();
-                if (bagPanel.classList.contains('show')) {
-                    showBagUI();
-                }
-            } catch (err) {
-                console.error(err);
-                alert('حدث خطأ: ' + err.message);
-            }
-        };
-
-        // ===== السلايدر =====
-        function initSlider(totalSlides) {
+        function initSlider(mediaArray) {
             let current = 0;
             const slidesEl = document.getElementById('sliderSlides');
             const dots = document.querySelectorAll('.slider-dot');
             const counterEl = document.getElementById('sliderCounter');
+            const container = document.getElementById('sliderContainer');
             if (!slidesEl) return;
 
             function updateSlider() {
                 slidesEl.style.transform = `translateX(${current * 100}%)`;
                 dots.forEach((d, i) => d.classList.toggle('active', i === current));
-                if (counterEl) counterEl.textContent = `${current + 1} / ${totalSlides}`;
+                if (counterEl) counterEl.textContent = `${current + 1} / ${mediaArray.length}`;
+                const allVideos = slidesEl.querySelectorAll('video');
+                allVideos.forEach((video, idx) => { if (idx !== current) video.pause(); });
             }
 
             function goTo(idx) {
-                current = (idx + totalSlides) % totalSlides;
+                current = (idx + mediaArray.length) % mediaArray.length;
                 updateSlider();
             }
 
-            const prevBtn = document.getElementById('sliderPrev');
-            const nextBtn = document.getElementById('sliderNext');
-            if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation();
-                goTo(current - 1); });
-            if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation();
-                goTo(current + 1); });
-            dots.forEach(dot => {
-                dot.addEventListener('click', (e) => { e.stopPropagation();
-                    goTo(parseInt(dot.dataset.index)); });
+            document.querySelectorAll('.slider-slide').forEach(slide => {
+                slide.style.cursor = 'pointer';
+                slide.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openFullscreen(mediaArray, current);
+                });
             });
 
-            let touchStartX = 0,
-                touchEndX = 0;
-            const container = document.getElementById('sliderContainer');
+            const prevBtn = document.getElementById('sliderPrev');
+            const nextBtn = document.getElementById('sliderNext');
+            if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
+            if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
+            dots.forEach(dot => {
+                dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(parseInt(dot.dataset.index)); });
+            });
+
+            let touchStartX = 0, touchEndX = 0;
             if (container) {
                 container.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
                 container.addEventListener('touchend', (e) => {
@@ -1594,19 +1032,76 @@
         carModal.addEventListener('click', (e) => { if (e.target === carModal) closeModal(); });
         window.openModal = openModal;
 
-        // ===== تحميل البيانات =====
+        // ===== Fullscreen =====
+        function openFullscreen(mediaArray, startIndex) {
+            fsMediaArray = mediaArray;
+            fsCurrentIndex = startIndex;
+            fsOverlay.classList.add('open');
+            renderFullscreenItem();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function renderFullscreenItem() {
+            const item = fsMediaArray[fsCurrentIndex];
+            if (!item) return;
+            let html = '';
+            if (item.type === 'video') {
+                html = `<video src="${item.url}" controls autoplay playsinline></video>`;
+            } else {
+                html = `<img src="${item.url}" alt="صورة" loading="eager">`;
+            }
+            fsContainer.innerHTML = html;
+            fsCounter.textContent = `${fsCurrentIndex + 1} / ${fsMediaArray.length}`;
+        }
+
+        function closeFullscreen() {
+            fsOverlay.classList.remove('open');
+            fsContainer.innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        function fsPrev() {
+            if (fsCurrentIndex > 0) {
+                fsCurrentIndex--;
+                renderFullscreenItem();
+            }
+        }
+        function fsNext() {
+            if (fsCurrentIndex < fsMediaArray.length - 1) {
+                fsCurrentIndex++;
+                renderFullscreenItem();
+            }
+        }
+
+        document.getElementById('fsClose').addEventListener('click', closeFullscreen);
+        document.getElementById('fsPrevBtn').addEventListener('click', (e) => { e.stopPropagation(); fsPrev(); });
+        document.getElementById('fsNextBtn').addEventListener('click', (e) => { e.stopPropagation(); fsNext(); });
+        fsOverlay.addEventListener('click', (e) => { if (e.target === fsOverlay) closeFullscreen(); });
+
+        document.addEventListener('keydown', (e) => {
+            if (fsOverlay.classList.contains('open')) {
+                if (e.key === 'Escape') closeFullscreen();
+                if (e.key === 'ArrowRight') fsNext();
+                if (e.key === 'ArrowLeft') fsPrev();
+            }
+        });
+
+        // ===== Load Data =====
         const carsRef = ref(db, 'cars');
         onValue(carsRef, (snapshot) => {
             const data = snapshot.exists() ? snapshot.val() : null;
             carsData = data;
             allCarsArray = data ? Object.entries(data).map(([key, car]) => ({ key, car })) : [];
-            renderCars(data);
+            if (!bagPanel.classList.contains('show')) {
+                renderCars(data);
+            } else {
+                showBagUI();
+            }
             updateBagCount();
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('navHome').classList.add('active');
         });
 
-        console.log('✅ CarSales - تصميم بسيط مع 4 مواصفات فقط في التفاصيل');
+        window.onload = () => { goHome(); };
+        console.log('✅ CarSales - بحث ذكي جداً يبحث في كل الحقول حتى لو كتبت جزء من الاسم');
     </script>
 
 </body>
